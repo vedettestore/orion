@@ -2,11 +2,25 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { StatsCard } from "@/components/StatsCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
-import { Box, Boxes, Users, AlertTriangle } from "lucide-react";
+import { Box, Boxes, Users, AlertTriangle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/auth");
+    } catch (error) {
+      toast.error("Error signing out");
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
@@ -23,6 +37,10 @@ const Index = () => {
               </Button>
               <Button className="bg-soft-blue hover:bg-soft-blue/90 text-gray-800">
                 Add Item
+              </Button>
+              <Button variant="outline" onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign out
               </Button>
             </div>
           </div>
