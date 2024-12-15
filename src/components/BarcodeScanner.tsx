@@ -57,7 +57,9 @@ export const BarcodeScanner = () => {
       });
     },
     constraints: {
-      deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
+      video: {
+        deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
+      }
     },
   });
 
