@@ -8,17 +8,21 @@ import { Button } from "@/components/ui/button";
 const Index = () => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar />
         <main className="flex-1 p-8">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold">Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
               <p className="text-muted-foreground">Welcome back to your warehouse overview</p>
             </div>
             <div className="space-x-4">
-              <Button variant="outline" className="bg-soft-gray hover:bg-soft-gray/90">Export Report</Button>
-              <Button className="bg-soft-blue hover:bg-soft-blue/90 text-gray-800">Add Item</Button>
+              <Button variant="outline" className="bg-soft-gray hover:bg-soft-gray/90">
+                Export Report
+              </Button>
+              <Button className="bg-soft-blue hover:bg-soft-blue/90 text-gray-800">
+                Add Item
+              </Button>
             </div>
           </div>
 
