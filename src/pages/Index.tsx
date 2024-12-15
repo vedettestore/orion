@@ -1,9 +1,10 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { StatsCard } from "@/components/StatsCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { Box, Boxes, Users, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BarcodeScanner } from "@/components/BarcodeScanner";
 
 const Index = () => {
   return (
@@ -54,6 +55,10 @@ const Index = () => {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h2 className="text-xl font-semibold mb-4">Scan Inventory</h2>
+              <BarcodeScanner />
+            </div>
             <ActivityFeed />
           </div>
         </main>
