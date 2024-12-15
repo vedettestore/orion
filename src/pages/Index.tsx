@@ -17,8 +17,8 @@ const Index = () => {
               <p className="text-muted-foreground">Welcome back to your warehouse overview</p>
             </div>
             <div className="space-x-4">
-              <Button variant="outline">Export Report</Button>
-              <Button>Add Item</Button>
+              <Button variant="outline" className="bg-soft-gray hover:bg-soft-gray/90">Export Report</Button>
+              <Button className="bg-soft-blue hover:bg-soft-blue/90 text-gray-800">Add Item</Button>
             </div>
           </div>
 

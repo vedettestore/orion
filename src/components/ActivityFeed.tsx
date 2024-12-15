@@ -27,7 +27,7 @@ const activities = [
 
 export function ActivityFeed() {
   return (
-    <Card>
+    <Card className="bg-soft-purple/30 border-soft-purple">
       <CardHeader>
         <CardTitle>Recent Activity</CardTitle>
       </CardHeader>
@@ -36,14 +36,14 @@ export function ActivityFeed() {
           {activities.map((activity, index) => (
             <div
               key={index}
-              className="flex items-center space-x-4 rounded-lg border p-3 text-sm"
+              className="flex items-center space-x-4 rounded-lg border bg-white/50 p-3 text-sm"
             >
-              <div className="rounded-full bg-blue-100 p-2">
-                <Box className="h-4 w-4 text-blue-600" />
+              <div className="rounded-full bg-soft-blue p-2">
+                <Box className="h-4 w-4 text-gray-600" />
               </div>
               <div className="flex-1">
                 <p className="font-medium">{activity.action}</p>
-                <p className="text-muted-foreground">
+                <p className="text-gray-600">
                   {activity.item}
                   {activity.from && (
                     <span className="flex items-center gap-1">
@@ -57,7 +57,7 @@ export function ActivityFeed() {
                   )}
                 </p>
               </div>
-              <span className="text-muted-foreground">{activity.time}</span>
+              <span className="text-gray-500">{activity.time}</span>
             </div>
           ))}
         </div>
