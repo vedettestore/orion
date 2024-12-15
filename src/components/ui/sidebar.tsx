@@ -19,9 +19,9 @@ import {
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH = "14rem" 
-const SIDEBAR_WIDTH_MOBILE = "16rem" 
-const SIDEBAR_WIDTH_ICON = "3rem" 
+const SIDEBAR_WIDTH = "12rem" // Changed from 14rem to 12rem
+const SIDEBAR_WIDTH_MOBILE = "14rem" // Changed from 16rem to 14rem
+const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
@@ -172,7 +172,7 @@ const Sidebar = React.forwardRef<
       return (
         <div
           className={cn(
-            "flex h-full w-[--sidebar-width] flex-col bg-[#96384f] text-white",
+            "flex h-full w-[--sidebar-width] flex-col bg-[#bf7a8c] text-white",
             className
           )}
           ref={ref}
@@ -189,7 +189,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-[--sidebar-width] bg-[#96384f] p-0 text-white [&>button]:hidden"
+            className="w-[--sidebar-width] bg-[#bf7a8c] p-0 text-white [&>button]:hidden"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -237,7 +237,7 @@ const Sidebar = React.forwardRef<
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-[#96384f] group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+            className="flex h-full w-full flex-col bg-[#bf7a8c] group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
           >
             {children}
           </div>
