@@ -20,7 +20,7 @@ const PackingLists = () => {
           created_at,
           created_by,
           notes,
-          created_by_profile:profiles(display_name)
+          created_by_profile:profiles!created_by(display_name)
         `)
         .order("created_at", { ascending: false });
 
