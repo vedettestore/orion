@@ -39,20 +39,36 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       }
     };
 
-    getDevices();
+    // Request camera permission first
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(() => getDevices())
+      .catch((error) => {
+        console.error("Camera permission denied:", error);
+        toast({
+          variant: "destructive",
+          title: "Camera Access Denied",
+          description: "Please allow camera access to scan barcodes",
+        });
+      });
   }, []);
 
   const { ref } = useZxing({
     onDecodeResult(result) {
       const scannedCode = result.getText();
+      console.log("Barcode scanned:", scannedCode); // Debug log
       if (onScan) {
         onScan(scannedCode);
       }
       setLastScannedCode(scannedCode);
+      toast({
+        title: "Barcode Scanned",
+        description: `Code: ${scannedCode}`,
+      });
       setIsScanning(false);
     },
     onError(error) {
-      console.error(error);
+      console.error("Scanning error:", error);
       toast({
         variant: "destructive",
         title: "Error scanning barcode",
@@ -62,17 +78,26 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
     constraints: {
       video: {
         deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
-      }
+        facingMode: "environment", // Prefer back camera on mobile devices
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      },
     },
+    timeBetweenDecodingAttempts: 300,
+    formats: ["QR_CODE", "EAN_13", "EAN_8", "CODE_128", "CODE_39", "UPC_A", "UPC_E"],
   });
 
   const handleStartScanning = async () => {
     try {
-      const permission = await navigator.mediaDevices.getUserMedia({
-        video: true,
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
+          facingMode: "environment",
+        },
       });
-      if (permission) {
+      if (stream) {
         setIsScanning(true);
+        console.log("Camera stream started"); // Debug log
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
