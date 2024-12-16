@@ -11,10 +11,26 @@ const AuthPage = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Clear any existing session data on mount
+    const clearSession = async () => {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error clearing session:', error);
+      }
+    };
+    
+    clearSession();
+
     // Check if user is already logged in
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Session check error:', error);
+        return;
+      }
+      
+      if (session?.user) {
         navigate("/");
       }
     };
@@ -22,15 +38,22 @@ const AuthPage = () => {
     checkUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
         navigate("/");
       } else if (event === 'SIGNED_OUT') {
         navigate("/auth");
+      } else if (event === 'TOKEN_REFRESHED') {
+        // Handle successful token refresh
+        if (session) {
+          navigate("/");
+        }
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   return (
