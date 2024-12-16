@@ -13,10 +13,26 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
-          throw error;
+          console.error('Session check error:', error);
+          setIsAuthenticated(false);
+          return;
         }
-        
-        setIsAuthenticated(!!session);
+
+        // If no session, try to refresh
+        if (!session) {
+          const { data: { session: refreshedSession }, error: refreshError } = 
+            await supabase.auth.refreshSession();
+          
+          if (refreshError) {
+            console.error('Session refresh error:', refreshError);
+            setIsAuthenticated(false);
+            return;
+          }
+          
+          setIsAuthenticated(!!refreshedSession);
+        } else {
+          setIsAuthenticated(true);
+        }
       } catch (error) {
         console.error('Auth check error:', error);
         setIsAuthenticated(false);
@@ -34,16 +50,20 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event);
+      
       if (event === 'TOKEN_REFRESHED') {
         setIsAuthenticated(!!session);
       } else if (event === 'SIGNED_OUT') {
         setIsAuthenticated(false);
-      } else if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-        setIsAuthenticated(!!session);
+      } else if (event === 'SIGNED_IN') {
+        setIsAuthenticated(true);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [toast]);
 
   if (isAuthenticated === null) {
