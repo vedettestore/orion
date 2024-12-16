@@ -29,6 +29,11 @@ const Index = () => {
     },
   });
 
+  const handleScan = (barcode: string) => {
+    console.log("Barcode scanned:", barcode);
+    toast.success(`Scanned barcode: ${barcode}`);
+  };
+
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -92,7 +97,7 @@ const Index = () => {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h2 className="text-xl font-semibold mb-4">Scan Inventory</h2>
-              <BarcodeScanner />
+              <BarcodeScanner onScan={handleScan} />
             </div>
             <ActivityFeed />
           </div>
