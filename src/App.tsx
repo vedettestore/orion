@@ -13,7 +13,6 @@ import Locations from "./pages/Locations";
 import Team from "./pages/Team";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
-import PackingLists from "./pages/PackingLists";
 
 const queryClient = new QueryClient();
 
@@ -103,14 +102,6 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Settings />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/packing"
-            element={
-              <ProtectedRoute>
-                <PackingLists />
               </ProtectedRoute>
             }
           />
