@@ -16,7 +16,8 @@ import {
   Users2, 
   History, 
   Settings2,
-  ChevronRight
+  ChevronRight,
+  List
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -26,6 +27,7 @@ const menuItems = [
   { title: "Items", icon: BoxesIcon, url: "/items" },
   { title: "Locations", icon: Building2, url: "/locations" },
   { title: "Team", icon: Users2, url: "/team" },
+  { title: "Packing Lists", icon: List, url: "/packing-lists" },
   { title: "History", icon: History, url: "/history" },
   { title: "Settings", icon: Settings2, url: "/settings" },
 ];
