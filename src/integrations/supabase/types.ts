@@ -228,6 +228,9 @@ export type Database = {
           notes: string | null
           order_total: number | null
           po_number: string
+          shipping_address: string | null
+          shipping_method: string | null
+          shipping_status: string | null
           status: string | null
         }
         Insert: {
@@ -238,6 +241,9 @@ export type Database = {
           notes?: string | null
           order_total?: number | null
           po_number: string
+          shipping_address?: string | null
+          shipping_method?: string | null
+          shipping_status?: string | null
           status?: string | null
         }
         Update: {
@@ -248,6 +254,9 @@ export type Database = {
           notes?: string | null
           order_total?: number | null
           po_number?: string
+          shipping_address?: string | null
+          shipping_method?: string | null
+          shipping_status?: string | null
           status?: string | null
         }
         Relationships: []
@@ -281,6 +290,97 @@ export type Database = {
           scanned_by?: string | null
         }
         Relationships: []
+      }
+      shipment_events: {
+        Row: {
+          created_by: string | null
+          description: string | null
+          id: number
+          location: string | null
+          shipment_id: number | null
+          status: string
+          timestamp: string | null
+        }
+        Insert: {
+          created_by?: string | null
+          description?: string | null
+          id?: number
+          location?: string | null
+          shipment_id?: number | null
+          status: string
+          timestamp?: string | null
+        }
+        Update: {
+          created_by?: string | null
+          description?: string | null
+          id?: number
+          location?: string | null
+          shipment_id?: number | null
+          status?: string
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_events_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipments: {
+        Row: {
+          actual_delivery: string | null
+          carrier: string | null
+          created_at: string | null
+          estimated_delivery: string | null
+          id: number
+          notes: string | null
+          purchase_order_id: number | null
+          shipping_address: string | null
+          shipping_method: string | null
+          status: string | null
+          tracking_number: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_delivery?: string | null
+          carrier?: string | null
+          created_at?: string | null
+          estimated_delivery?: string | null
+          id?: number
+          notes?: string | null
+          purchase_order_id?: number | null
+          shipping_address?: string | null
+          shipping_method?: string | null
+          status?: string | null
+          tracking_number?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_delivery?: string | null
+          carrier?: string | null
+          created_at?: string | null
+          estimated_delivery?: string | null
+          id?: number
+          notes?: string | null
+          purchase_order_id?: number | null
+          shipping_address?: string | null
+          shipping_method?: string | null
+          status?: string | null
+          tracking_number?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_purchase_order_id_fkey"
+            columns: ["purchase_order_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       test_inventory: {
         Row: {

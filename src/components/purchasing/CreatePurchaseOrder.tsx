@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { ComboboxDemo } from "./SkuCombobox";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CreatePurchaseOrderProps {
   onSuccess: () => void;
@@ -15,7 +16,11 @@ interface CreatePurchaseOrderProps {
 export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [customerName, setCustomerName] = useState("");
-  const [selectedItems, setSelectedItems] = useState<Array<{ sku: string; quantity: number }>>([]);
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [shippingMethod, setShippingMethod] = useState("");
+  const [selectedItems, setSelectedItems] = useState<
+    Array<{ sku: string; quantity: number }>
+  >([]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -28,7 +33,6 @@ export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
     setIsLoading(true);
 
     try {
-      // Generate a unique PO number (you might want to implement a more sophisticated system)
       const poNumber = `PO-${Date.now()}`;
 
       const { data: orderData, error: orderError } = await supabase
@@ -37,7 +41,10 @@ export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
           {
             po_number: poNumber,
             customer_name: customerName,
+            shipping_address: shippingAddress,
+            shipping_method: shippingMethod,
             status: "draft",
+            shipping_status: "pending",
           },
         ])
         .select()
@@ -45,14 +52,14 @@ export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
 
       if (orderError) throw orderError;
 
-      // Add order items
-      const { error: itemsError } = await supabase.from("purchase_order_items").insert(
-        selectedItems.map((item) => ({
-          purchase_order_id: orderData.id,
-          // Note: In a real app, you'd want to properly link this to your inventory items
-          quantity: item.quantity,
-        }))
-      );
+      const { error: itemsError } = await supabase
+        .from("purchase_order_items")
+        .insert(
+          selectedItems.map((item) => ({
+            purchase_order_id: orderData.id,
+            quantity: item.quantity,
+          }))
+        );
 
       if (itemsError) throw itemsError;
 
@@ -83,6 +90,26 @@ export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
             id="customerName"
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="shippingAddress">Shipping Address</Label>
+          <Textarea
+            id="shippingAddress"
+            value={shippingAddress}
+            onChange={(e) => setShippingAddress(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="shippingMethod">Shipping Method</Label>
+          <Input
+            id="shippingMethod"
+            value={shippingMethod}
+            onChange={(e) => setShippingMethod(e.target.value)}
             required
           />
         </div>
