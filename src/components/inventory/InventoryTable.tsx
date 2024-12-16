@@ -18,6 +18,7 @@ interface InventoryItem {
   sku?: string;
   status?: string;
   "image url"?: string;
+  quantity?: number;
 }
 
 interface InventoryTableProps {
@@ -45,6 +46,7 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
               <TableHead className="font-semibold">Product</TableHead>
               <TableHead className="font-semibold">Type</TableHead>
               <TableHead className="font-semibold">SKU</TableHead>
+              <TableHead className="font-semibold">Quantity</TableHead>
               <TableHead className="font-semibold">Status</TableHead>
               <TableHead className="w-[100px] font-semibold">Actions</TableHead>
             </TableRow>
@@ -68,6 +70,7 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
                 </TableCell>
                 <TableCell className="text-gray-600">{item.type || "N/A"}</TableCell>
                 <TableCell className="text-gray-600">{item.sku || "N/A"}</TableCell>
+                <TableCell className="text-gray-600">{item.quantity || 0}</TableCell>
                 <TableCell>
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     item.status === "In Stock" 

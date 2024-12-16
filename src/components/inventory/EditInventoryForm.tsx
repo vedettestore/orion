@@ -21,6 +21,7 @@ interface InventoryItem {
   sku?: string;
   status?: string;
   "image url"?: string;
+  quantity?: number;
 }
 
 interface EditInventoryFormProps {
@@ -37,6 +38,7 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
       sku: item.sku || "",
       status: item.status || "",
       "image url": item["image url"] || "",
+      quantity: item.quantity || 0,
     },
   });
 
@@ -116,6 +118,23 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
                   <FormLabel className="text-gray-700">SKU</FormLabel>
                   <FormControl>
                     <Input {...field} className="focus-visible:ring-primary" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Quantity</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      {...field} 
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      className="focus-visible:ring-primary" 
+                    />
                   </FormControl>
                 </FormItem>
               )}
