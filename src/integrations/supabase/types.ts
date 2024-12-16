@@ -9,6 +9,63 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      inventory: {
+        Row: {
+          barcode: string | null
+          category: string | null
+          color: string | null
+          description: string | null
+          id: number
+          "image url": string | null
+          "inventory policy": string | null
+          "inventory tracker": string | null
+          name: string
+          price: number | null
+          size: string | null
+          sku: string | null
+          status: string | null
+          tags: string | null
+          type: string | null
+          "variant image url": string | null
+        }
+        Insert: {
+          barcode?: string | null
+          category?: string | null
+          color?: string | null
+          description?: string | null
+          id?: never
+          "image url"?: string | null
+          "inventory policy"?: string | null
+          "inventory tracker"?: string | null
+          name: string
+          price?: number | null
+          size?: string | null
+          sku?: string | null
+          status?: string | null
+          tags?: string | null
+          type?: string | null
+          "variant image url"?: string | null
+        }
+        Update: {
+          barcode?: string | null
+          category?: string | null
+          color?: string | null
+          description?: string | null
+          id?: never
+          "image url"?: string | null
+          "inventory policy"?: string | null
+          "inventory tracker"?: string | null
+          name?: string
+          price?: number | null
+          size?: string | null
+          sku?: string | null
+          status?: string | null
+          tags?: string | null
+          type?: string | null
+          "variant image url"?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

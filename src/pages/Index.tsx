@@ -8,9 +8,34 @@ import { BarcodeScanner } from "@/components/BarcodeScanner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const Index = () => {
   const navigate = useNavigate();
+
+  const { data: inventoryItems, isLoading } = useQuery({
+    queryKey: ['inventory'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('inventory')
+        .select('*');
+      
+      if (error) {
+        toast.error('Failed to fetch inventory');
+        throw error;
+      }
+      
+      return data;
+    },
+  });
 
   const handleSignOut = async () => {
     try {
@@ -48,7 +73,7 @@ const Index = () => {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
             <StatsCard
               title="Total Items"
-              value="2,345"
+              value={inventoryItems?.length.toString() || "0"}
               icon={Box}
               description="+20.1% from last month"
             />
@@ -70,6 +95,38 @@ const Index = () => {
               icon={Users}
               description="Active this week"
             />
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
+            <h2 className="text-xl font-semibold mb-4">Inventory Items</h2>
+            {isLoading ? (
+              <p>Loading inventory...</p>
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>SKU</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {inventoryItems?.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell>{item.sku}</TableCell>
+                        <TableCell>{item.category}</TableCell>
+                        <TableCell>${item.price?.toFixed(2)}</TableCell>
+                        <TableCell>{item.status}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
