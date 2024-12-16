@@ -1,5 +1,5 @@
 import { useZxing } from "react-zxing";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,8 +18,14 @@ export const BarcodeScanner = () => {
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [lastScannedCode, setLastScannedCode] = useState<string>("");
+  const [showOverlay, setShowOverlay] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
+    // Initialize audio
+    audioRef.current = new Audio('/scan-beep.mp3');
+    audioRef.current.preload = 'auto';
+
     const getDevices = async () => {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -45,6 +51,15 @@ export const BarcodeScanner = () => {
 
   const handleScanCount = async (scannedCode: string) => {
     try {
+      // Play success sound
+      if (audioRef.current) {
+        audioRef.current.play().catch(console.error);
+      }
+
+      // Show visual feedback
+      setShowOverlay(true);
+      setTimeout(() => setShowOverlay(false), 1000);
+
       // First, check if the item exists in inventory
       const { data: inventoryItem, error: inventoryError } = await supabase
         .from("inventory")
@@ -169,6 +184,13 @@ export const BarcodeScanner = () => {
       {isScanning ? (
         <div className="relative">
           <video ref={ref} className="w-full rounded-lg" />
+          {showOverlay && (
+            <div className="absolute inset-0 bg-green-500 bg-opacity-20 animate-fade-out flex items-center justify-center">
+              <div className="text-white text-2xl font-bold animate-scale-in">
+                Scanned!
+              </div>
+            </div>
+          )}
           <Button
             variant="secondary"
             className="absolute top-2 right-2"
