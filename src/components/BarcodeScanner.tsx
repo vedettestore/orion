@@ -3,14 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { ScannerControls } from "./scanner/ScannerControls";
+import { ScannerPreview } from "./scanner/ScannerPreview";
+import { ScannerFeedback } from "./scanner/ScannerFeedback";
 
 export const BarcodeScanner = () => {
   const [isScanning, setIsScanning] = useState(false);
@@ -22,7 +17,6 @@ export const BarcodeScanner = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Initialize audio
     audioRef.current = new Audio('/scan-beep.mp3');
     audioRef.current.preload = 'auto';
 
@@ -51,16 +45,13 @@ export const BarcodeScanner = () => {
 
   const handleScanCount = async (scannedCode: string) => {
     try {
-      // Play success sound
       if (audioRef.current) {
         audioRef.current.play().catch(console.error);
       }
 
-      // Show visual feedback
       setShowOverlay(true);
       setTimeout(() => setShowOverlay(false), 1000);
 
-      // First, check if the item exists in inventory
       const { data: inventoryItem, error: inventoryError } = await supabase
         .from("inventory")
         .select("id, name")
@@ -76,7 +67,6 @@ export const BarcodeScanner = () => {
         return;
       }
 
-      // Insert scan count
       const { error: scanError } = await supabase
         .from("scan_counts")
         .insert({
@@ -87,7 +77,6 @@ export const BarcodeScanner = () => {
 
       if (scanError) throw scanError;
 
-      // Update inventory quantity
       const { error: updateError } = await supabase
         .from("inventory")
         .update({ quantity: quantity })
@@ -101,7 +90,7 @@ export const BarcodeScanner = () => {
       });
 
       setLastScannedCode(scannedCode);
-      setQuantity(1); // Reset quantity for next scan
+      setQuantity(1);
     } catch (error) {
       console.error("Error saving scan count:", error);
       toast({
@@ -153,52 +142,20 @@ export const BarcodeScanner = () => {
 
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
-      <div className="flex items-center gap-4">
-        <Input
-          type="number"
-          min="1"
-          value={quantity}
-          onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-          className="w-24"
-          placeholder="Qty"
-        />
-        {devices.length > 1 && (
-          <Select
-            value={selectedDevice}
-            onValueChange={(value) => setSelectedDevice(value)}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select camera" />
-            </SelectTrigger>
-            <SelectContent>
-              {devices.map((device) => (
-                <SelectItem key={device.deviceId} value={device.deviceId}>
-                  {device.label || `Camera ${device.deviceId.slice(0, 5)}...`}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-      </div>
+      <ScannerControls
+        quantity={quantity}
+        setQuantity={setQuantity}
+        devices={devices}
+        selectedDevice={selectedDevice}
+        setSelectedDevice={setSelectedDevice}
+      />
       
       {isScanning ? (
-        <div className="relative">
-          <video ref={ref} className="w-full rounded-lg" />
-          {showOverlay && (
-            <div className="absolute inset-0 bg-green-500 bg-opacity-20 animate-fade-out flex items-center justify-center">
-              <div className="text-white text-2xl font-bold animate-scale-in">
-                Scanned!
-              </div>
-            </div>
-          )}
-          <Button
-            variant="secondary"
-            className="absolute top-2 right-2"
-            onClick={() => setIsScanning(false)}
-          >
-            Cancel
-          </Button>
-        </div>
+        <ScannerPreview
+          videoRef={ref}
+          showOverlay={showOverlay}
+          onCancel={() => setIsScanning(false)}
+        />
       ) : (
         <Button
           className="w-full bg-soft-blue hover:bg-soft-blue/90 text-gray-800"
@@ -208,11 +165,7 @@ export const BarcodeScanner = () => {
         </Button>
       )}
 
-      {lastScannedCode && (
-        <div className="text-sm text-gray-500 text-center">
-          Last scanned: {lastScannedCode}
-        </div>
-      )}
+      <ScannerFeedback lastScannedCode={lastScannedCode} />
     </div>
   );
 };
