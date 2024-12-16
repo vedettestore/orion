@@ -6,7 +6,7 @@ import { Barcode } from "lucide-react";
 import { CameraSelect } from "./CameraSelect";
 import { QuantityInput } from "./QuantityInput";
 import { ScannerPreview } from "./ScannerPreview";
-import { BarcodeFormat } from "@zxing/library";
+import { BarcodeFormat, DecodeHintType } from "@zxing/library";
 
 interface BarcodeScannerProps {
   onScan?: (barcode: string) => void;
@@ -54,6 +54,17 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       });
   }, []);
 
+  const hints = new Map<DecodeHintType, any>();
+  hints.set(DecodeHintType.POSSIBLE_FORMATS, [
+    BarcodeFormat.QR_CODE,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.EAN_8,
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.CODE_39,
+    BarcodeFormat.UPC_A,
+    BarcodeFormat.UPC_E,
+  ]);
+
   const { ref } = useZxing({
     onDecodeResult(result) {
       const scannedCode = result.getText();
@@ -85,15 +96,7 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       },
     },
     timeBetweenDecodingAttempts: 300,
-    hints: [
-      BarcodeFormat.QR_CODE,
-      BarcodeFormat.EAN_13,
-      BarcodeFormat.EAN_8,
-      BarcodeFormat.CODE_128,
-      BarcodeFormat.CODE_39,
-      BarcodeFormat.UPC_A,
-      BarcodeFormat.UPC_E,
-    ],
+    hints,
   });
 
   const handleStartScanning = async () => {
