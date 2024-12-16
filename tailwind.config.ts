@@ -21,6 +21,12 @@ export default {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
       },
+      keyframes: {
+        scan: {
+          "0%, 100%": { transform: "translateY(0%)" },
+          "50%": { transform: "translateY(100%)" },
+        }
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
