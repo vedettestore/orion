@@ -3,9 +3,10 @@ import { PackingListCard } from "./PackingListCard";
 interface PackingListGridProps {
   lists: any[];
   onEdit: (list: any) => void;
+  onDelete: (id: number) => void;
 }
 
-export const PackingListGrid = ({ lists, onEdit }: PackingListGridProps) => {
+export const PackingListGrid = ({ lists, onEdit, onDelete }: PackingListGridProps) => {
   if (!lists?.length) {
     return (
       <div className="text-center py-12">
@@ -22,6 +23,7 @@ export const PackingListGrid = ({ lists, onEdit }: PackingListGridProps) => {
           key={list.id} 
           list={list} 
           onEdit={onEdit}
+          onDelete={onDelete}
         />
       ))}
     </div>
