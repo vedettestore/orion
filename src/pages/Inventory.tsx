@@ -25,7 +25,7 @@ const Inventory = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar />
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 md:p-8">
           <InventoryHeader />
           <div className="rounded-lg border bg-card">
             <InventoryTable data={inventoryItems || []} isLoading={isLoading} />

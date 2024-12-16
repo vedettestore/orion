@@ -57,9 +57,9 @@ const AuthPage = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
       <div className="w-full max-w-sm">
-        <div className="bg-[#000000e6] p-6 rounded-lg shadow-sm">
+        <div className="bg-[#000000e6] p-4 md:p-6 rounded-lg shadow-sm">
           <h1 className="text-xl font-semibold text-center mb-6 text-white">Orion Manufacturing</h1>
           <div className="relative">
             <Auth
