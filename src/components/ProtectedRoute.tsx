@@ -36,9 +36,9 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'TOKEN_REFRESHED') {
         setIsAuthenticated(!!session);
-      } else if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+      } else if (event === 'SIGNED_OUT') {
         setIsAuthenticated(false);
-      } else {
+      } else if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
         setIsAuthenticated(!!session);
       }
     });
