@@ -65,7 +65,7 @@ export function ActivityFeed() {
           {activities.map((activity, index) => (
             <div
               key={index}
-              className="flex items-center space-x-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md"
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md"
             >
               <div className={`rounded-full p-2 ${getActivityColor(activity.type)}`}>
                 {getActivityIcon(activity.type)}

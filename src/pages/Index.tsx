@@ -47,27 +47,36 @@ const Index = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar />
-        <main className="flex-1 p-8">
-          <div className="flex justify-between items-center mb-8">
+        <main className="flex-1 p-4 md:p-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Dashboard</h1>
               <p className="text-muted-foreground">Welcome back to your warehouse overview</p>
             </div>
-            <div className="space-x-4">
-              <Button variant="outline" className="bg-soft-gray hover:bg-soft-gray/90">
+            <div className="flex flex-wrap gap-2 md:gap-4 w-full md:w-auto">
+              <Button 
+                variant="outline" 
+                className="flex-1 md:flex-none bg-soft-gray hover:bg-soft-gray/90"
+              >
                 Export Report
               </Button>
-              <Button className="bg-soft-blue hover:bg-soft-blue/90 text-gray-800">
+              <Button 
+                className="flex-1 md:flex-none bg-soft-blue hover:bg-soft-blue/90 text-gray-800"
+              >
                 Add Item
               </Button>
-              <Button variant="outline" onClick={handleSignOut}>
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+                className="flex-1 md:flex-none"
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign out
               </Button>
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:mb-8">
             <StatsCard
               title="Total Items"
               value={inventoryItems?.length.toString() || "0"}
@@ -94,8 +103,8 @@ const Index = () => {
             />
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
               <h2 className="text-xl font-semibold mb-4">Scan Inventory</h2>
               <BarcodeScanner onScan={handleScan} />
             </div>

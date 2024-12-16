@@ -14,13 +14,13 @@ export function StatsCard({ title, value, icon: Icon, description }: StatsCardPr
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
         <div className="rounded-full bg-primary/10 p-2.5">
-          <Icon className="h-5 w-5 text-primary" />
+          <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
         </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-gray-900">{value}</div>
+        <div className="text-xl sm:text-2xl font-bold text-gray-900">{value}</div>
         {description && (
-          <p className="text-xs mt-1 text-gray-500">{description}</p>
+          <p className="text-xs sm:text-sm mt-1 text-gray-500">{description}</p>
         )}
       </CardContent>
     </Card>
