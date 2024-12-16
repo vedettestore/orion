@@ -72,6 +72,84 @@ export type Database = {
         }
         Relationships: []
       }
+      packing_list_items: {
+        Row: {
+          id: number
+          inventory_id: number | null
+          packed_at: string | null
+          packed_by: string | null
+          packing_list_id: number | null
+          quantity_packed: number | null
+          quantity_required: number
+          status: string | null
+        }
+        Insert: {
+          id?: number
+          inventory_id?: number | null
+          packed_at?: string | null
+          packed_by?: string | null
+          packing_list_id?: number | null
+          quantity_packed?: number | null
+          quantity_required: number
+          status?: string | null
+        }
+        Update: {
+          id?: number
+          inventory_id?: number | null
+          packed_at?: string | null
+          packed_by?: string | null
+          packing_list_id?: number | null
+          quantity_packed?: number | null
+          quantity_required?: number
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "packing_list_items_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "packing_list_items_packing_list_id_fkey"
+            columns: ["packing_list_id"]
+            isOneToOne: false
+            referencedRelation: "packing_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      packing_lists: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          customer_name: string | null
+          id: number
+          notes: string | null
+          order_number: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          customer_name?: string | null
+          id?: number
+          notes?: string | null
+          order_number: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          customer_name?: string | null
+          id?: number
+          notes?: string | null
+          order_number?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
