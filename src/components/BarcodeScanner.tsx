@@ -49,14 +49,14 @@ export const BarcodeScanner = () => {
       const { data: inventoryItem, error: inventoryError } = await supabase
         .from("inventory")
         .select("id, name")
-        .eq("barcode", scannedCode)
+        .eq("upc_code", scannedCode)
         .single();
 
       if (inventoryError || !inventoryItem) {
         toast({
           variant: "destructive",
           title: "Item Not Found",
-          description: "This barcode is not registered in inventory",
+          description: "This UPC code is not registered in inventory",
         });
         return;
       }
