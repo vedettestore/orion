@@ -12,7 +12,10 @@ const PackingLists = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("packing_lists")
-        .select("*, created_by(display_name)")
+        .select(`
+          *,
+          created_by_profile:profiles!packing_lists_created_by_fkey(display_name)
+        `)
         .order("created_at", { ascending: false });
 
       if (error) {

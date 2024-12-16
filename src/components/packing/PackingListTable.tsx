@@ -16,7 +16,8 @@ interface PackingList {
   customer_name: string;
   status: string;
   created_at: string;
-  created_by: { display_name: string } | null;
+  created_by: string | null;
+  created_by_profile?: { display_name: string | null } | null;
 }
 
 interface PackingListTableProps {
@@ -66,7 +67,7 @@ export const PackingListTable = ({ data, isLoading }: PackingListTableProps) => 
                   {list.status}
                 </span>
               </TableCell>
-              <TableCell>{list.created_by?.display_name || "Unknown"}</TableCell>
+              <TableCell>{list.created_by_profile?.display_name || "Unknown"}</TableCell>
               <TableCell>
                 {new Date(list.created_at).toLocaleDateString()}
               </TableCell>
