@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
 import { useZxing } from "react-zxing";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { Barcode } from "lucide-react";
 import { CameraSelect } from "./CameraSelect";
 import { QuantityInput } from "./QuantityInput";
 import { ScannerPreview } from "./ScannerPreview";
+import { BarcodeFormat } from "@zxing/library";
 
 interface BarcodeScannerProps {
   onScan?: (barcode: string) => void;
@@ -84,7 +85,15 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       },
     },
     timeBetweenDecodingAttempts: 300,
-    formats: ["QR_CODE", "EAN_13", "EAN_8", "CODE_128", "CODE_39", "UPC_A", "UPC_E"],
+    hints: [
+      BarcodeFormat.QR_CODE,
+      BarcodeFormat.EAN_13,
+      BarcodeFormat.EAN_8,
+      BarcodeFormat.CODE_128,
+      BarcodeFormat.CODE_39,
+      BarcodeFormat.UPC_A,
+      BarcodeFormat.UPC_E,
+    ],
   });
 
   const handleStartScanning = async () => {
