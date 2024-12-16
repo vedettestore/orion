@@ -1,12 +1,13 @@
-import { useZxing } from "react-zxing";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { Barcode } from "lucide-react";
 import { CameraSelect } from "./CameraSelect";
 import { QuantityInput } from "./QuantityInput";
 import { ScannerPreview } from "./ScannerPreview";
-import { BarcodeFormat, DecodeHintType } from "@zxing/library";
+import { useCameraDevices } from "./useCameraDevices";
+import { useBarcodeScanner } from "./useBarcodeScanner";
+import { useBeepSound } from "./useBeepSound";
 
 interface BarcodeScannerProps {
   onScan?: (barcode: string) => void;
@@ -14,116 +15,25 @@ interface BarcodeScannerProps {
 
 export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
   const [isScanning, setIsScanning] = useState(false);
-  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
-  const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [lastScannedCode, setLastScannedCode] = useState<string>("");
+  const { devices, selectedDevice, setSelectedDevice } = useCameraDevices();
+  const { playBeep } = useBeepSound();
 
-  const playBeep = useCallback(() => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+  const handleScanSuccess = (scannedCode: string) => {
+    playBeep();
+    setLastScannedCode(scannedCode);
+    toast({
+      title: "Barcode Scanned",
+      description: `Code: ${scannedCode}`,
+    });
+    setIsScanning(false);
+  };
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.1);
-
-    // Clean up
-    setTimeout(() => {
-      audioContext.close();
-    }, 200);
-  }, []);
-
-  useEffect(() => {
-    const getDevices = async () => {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(
-          (device) => device.kind === "videoinput"
-        );
-        setDevices(videoDevices);
-        if (videoDevices.length > 0) {
-          setSelectedDevice(videoDevices[0].deviceId);
-        }
-      } catch (error) {
-        console.error("Error getting devices:", error);
-        toast({
-          variant: "destructive",
-          title: "Camera Error",
-          description: "Unable to access camera devices",
-        });
-      }
-    };
-
-    // Request camera permission first
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(() => getDevices())
-      .catch((error) => {
-        console.error("Camera permission denied:", error);
-        toast({
-          variant: "destructive",
-          title: "Camera Access Denied",
-          description: "Please allow camera access to scan barcodes",
-        });
-      });
-  }, []);
-
-  const hints = new Map();
-  hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-    BarcodeFormat.QR_CODE,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.EAN_8,
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.CODE_39,
-    BarcodeFormat.UPC_A,
-    BarcodeFormat.UPC_E,
-  ]);
-  hints.set(DecodeHintType.TRY_HARDER, true);
-  hints.set(DecodeHintType.ASSUME_GS1, true);
-  hints.set(DecodeHintType.CHARACTER_SET, "UTF-8");
-
-  const { ref } = useZxing({
-    onDecodeResult(result) {
-      const scannedCode = result.getText();
-      console.log("Barcode scanned:", scannedCode);
-      playBeep();
-      if (onScan) {
-        onScan(scannedCode);
-      }
-      setLastScannedCode(scannedCode);
-      toast({
-        title: "Barcode Scanned",
-        description: `Code: ${scannedCode}`,
-      });
-      setIsScanning(false);
-    },
-    onError(error) {
-      console.error("Scanning error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error scanning barcode",
-        description: "Please try again",
-      });
-    },
-    constraints: {
-      video: {
-        deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
-        facingMode: "environment",
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-        aspectRatio: { ideal: 1.7777777778 },
-        frameRate: { ideal: 30 },
-      },
-    },
-    timeBetweenDecodingAttempts: 150, // Reduced from 300ms to 150ms
-    hints,
+  const { ref } = useBarcodeScanner({
+    selectedDevice,
+    onScan,
+    onSuccess: handleScanSuccess,
   });
 
   const handleStartScanning = async () => {
@@ -136,7 +46,7 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       });
       if (stream) {
         setIsScanning(true);
-        console.log("Camera stream started"); // Debug log
+        console.log("Camera stream started");
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
