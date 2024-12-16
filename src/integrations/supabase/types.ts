@@ -204,6 +204,21 @@ export type Database = {
         }
         Relationships: []
       }
+      test_inventory: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: never
+          name: string
+        }
+        Update: {
+          id?: never
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
