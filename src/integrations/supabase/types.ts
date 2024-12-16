@@ -90,6 +90,44 @@ export type Database = {
         }
         Relationships: []
       }
+      scan_counts: {
+        Row: {
+          batch_id: string | null
+          count: number | null
+          id: number
+          inventory_id: number | null
+          notes: string | null
+          scanned_at: string | null
+          scanned_by: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          count?: number | null
+          id?: number
+          inventory_id?: number | null
+          notes?: string | null
+          scanned_at?: string | null
+          scanned_by?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          count?: number | null
+          id?: number
+          inventory_id?: number | null
+          notes?: string | null
+          scanned_at?: string | null
+          scanned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_counts_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
