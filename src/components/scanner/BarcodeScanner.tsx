@@ -54,17 +54,6 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       });
   }, []);
 
-  const hints = new Map<DecodeHintType, any>();
-  hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-    BarcodeFormat.QR_CODE,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.EAN_8,
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.CODE_39,
-    BarcodeFormat.UPC_A,
-    BarcodeFormat.UPC_E,
-  ]);
-
   const { ref } = useZxing({
     onDecodeResult(result) {
       const scannedCode = result.getText();
@@ -96,7 +85,15 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       },
     },
     timeBetweenDecodingAttempts: 300,
-    hints,
+    formats: [
+      BarcodeFormat.QR_CODE,
+      BarcodeFormat.EAN_13,
+      BarcodeFormat.EAN_8,
+      BarcodeFormat.CODE_128,
+      BarcodeFormat.CODE_39,
+      BarcodeFormat.UPC_A,
+      BarcodeFormat.UPC_E,
+    ],
   });
 
   const handleStartScanning = async () => {
