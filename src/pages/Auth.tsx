@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Mail, Lock } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const AuthPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -20,9 +22,11 @@ const AuthPage = () => {
     checkUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
         navigate("/");
+      } else if (event === 'SIGNED_OUT') {
+        navigate("/auth");
       }
     });
 
@@ -55,6 +59,13 @@ const AuthPage = () => {
                 },
               }}
               providers={[]}
+              onError={(error) => {
+                toast({
+                  variant: "destructive",
+                  title: "Authentication Error",
+                  description: error.message,
+                });
+              }}
             />
             <Mail className="absolute text-gray-400 left-3 top-[59px] h-5 w-5 pointer-events-none" />
             <Lock className="absolute text-gray-400 left-3 top-[127px] h-5 w-5 pointer-events-none" />
