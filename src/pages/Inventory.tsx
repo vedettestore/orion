@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InventoryHeader } from "@/components/inventory/InventoryHeader";
 import { InventoryTable } from "@/components/inventory/InventoryTable";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 
 const Inventory = () => {
   const { data: inventoryItems, isLoading } = useQuery({
@@ -20,12 +22,17 @@ const Inventory = () => {
   });
 
   return (
-    <div className="container mx-auto py-8">
-      <InventoryHeader />
-      <div className="rounded-lg border bg-card">
-        <InventoryTable data={inventoryItems || []} isLoading={isLoading} />
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gray-50">
+        <AppSidebar />
+        <main className="flex-1 p-8">
+          <InventoryHeader />
+          <div className="rounded-lg border bg-card">
+            <InventoryTable data={inventoryItems || []} isLoading={isLoading} />
+          </div>
+        </main>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
