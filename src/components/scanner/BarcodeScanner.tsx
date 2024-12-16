@@ -85,12 +85,15 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
     BarcodeFormat.UPC_A,
     BarcodeFormat.UPC_E,
   ]);
+  hints.set(DecodeHintType.TRY_HARDER, true);
+  hints.set(DecodeHintType.ASSUME_GS1, true);
+  hints.set(DecodeHintType.CHARACTER_SET, "UTF-8");
 
   const { ref } = useZxing({
     onDecodeResult(result) {
       const scannedCode = result.getText();
-      console.log("Barcode scanned:", scannedCode); // Debug log
-      playBeep(); // Play beep sound on successful scan
+      console.log("Barcode scanned:", scannedCode);
+      playBeep();
       if (onScan) {
         onScan(scannedCode);
       }
@@ -112,12 +115,14 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
     constraints: {
       video: {
         deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
-        facingMode: "environment", // Prefer back camera on mobile devices
+        facingMode: "environment",
         width: { ideal: 1280 },
         height: { ideal: 720 },
+        aspectRatio: { ideal: 1.7777777778 },
+        frameRate: { ideal: 30 },
       },
     },
-    timeBetweenDecodingAttempts: 300,
+    timeBetweenDecodingAttempts: 150, // Reduced from 300ms to 150ms
     hints,
   });
 
