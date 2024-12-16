@@ -21,11 +21,13 @@ export type Database = {
           "inventory tracker": string | null
           name: string
           price: number | null
+          quantity: number | null
           size: string | null
           sku: string | null
           status: string | null
           tags: string | null
           type: string | null
+          upc_code: string | null
           "variant image url": string | null
         }
         Insert: {
@@ -39,11 +41,13 @@ export type Database = {
           "inventory tracker"?: string | null
           name: string
           price?: number | null
+          quantity?: number | null
           size?: string | null
           sku?: string | null
           status?: string | null
           tags?: string | null
           type?: string | null
+          upc_code?: string | null
           "variant image url"?: string | null
         }
         Update: {
@@ -57,11 +61,13 @@ export type Database = {
           "inventory tracker"?: string | null
           name?: string
           price?: number | null
+          quantity?: number | null
           size?: string | null
           sku?: string | null
           status?: string | null
           tags?: string | null
           type?: string | null
+          upc_code?: string | null
           "variant image url"?: string | null
         }
         Relationships: []
