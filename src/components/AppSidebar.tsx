@@ -36,12 +36,16 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <Link
                       to={item.url}
-                      className={`flex items-center gap-3 ${
-                        location.pathname === item.url ? 'text-primary' : ''
+                      className={`flex items-center gap-3 transition-all duration-300 ease-in-out rounded-md hover:bg-white/10 ${
+                        location.pathname === item.url 
+                          ? 'text-primary bg-white/10 scale-[1.02] transform' 
+                          : 'hover:scale-[1.02] transform'
                       }`}
                     >
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.title}</span>
+                      <item.icon className={`h-5 w-5 transition-transform duration-300 ${
+                        location.pathname === item.url ? 'scale-110' : ''
+                      }`} />
+                      <span className="transition-colors duration-300">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
