@@ -27,6 +27,9 @@ export default {
           "50%": { transform: "translateY(100%)" },
         }
       },
+      animation: {
+        scan: "scan 2s linear infinite",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
