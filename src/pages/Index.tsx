@@ -4,7 +4,7 @@ import { StatsCard } from "@/components/StatsCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { Box, Boxes, Users, AlertTriangle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { BarcodeScanner } from "@/components/scanner/BarcodeScanner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
