@@ -2,6 +2,7 @@ import { useZxing } from "react-zxing";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { Barcode } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -131,9 +132,10 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
         </div>
       ) : (
         <Button
-          className="w-full bg-soft-blue hover:bg-soft-blue/90 text-gray-800"
+          className="w-full bg-soft-purple hover:bg-soft-purple/90 text-gray-800"
           onClick={handleStartScanning}
         >
+          <Barcode className="mr-2 h-4 w-4" />
           Scan Barcode
         </Button>
       )}
