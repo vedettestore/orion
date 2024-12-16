@@ -53,18 +53,29 @@ const AuthPage = () => {
                   },
                 },
                 className: {
-                  input: 'pl-10 relative',
+                  input: 'pl-10',
                   container: 'gap-3',
                   button: 'py-2',
-                },
+                }
               }}
               providers={[]}
-              onError={(error) => {
-                toast({
-                  variant: "destructive",
-                  title: "Authentication Error",
-                  description: error.message,
-                });
+              theme="dark"
+              localization={{
+                variables: {
+                  sign_in: {
+                    email_label: 'Email',
+                    password_label: 'Password',
+                  },
+                },
+              }}
+              {...{
+                onError: (error) => {
+                  toast({
+                    variant: "destructive",
+                    title: "Authentication Error",
+                    description: error.message,
+                  });
+                },
               }}
             />
             <Mail className="absolute text-gray-400 left-3 top-[59px] h-5 w-5 pointer-events-none" />
