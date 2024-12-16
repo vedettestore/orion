@@ -42,7 +42,8 @@ export const useBarcodeScanner = ({
       // Only show errors if we're actively scanning
       if (enabled) {
         console.error("Scanning error:", error);
-        if (error.message !== "Stream not initialized.") {
+        // Type guard to check if error is an Error object
+        if (error instanceof Error && error.message !== "Stream not initialized.") {
           toast({
             variant: "destructive",
             title: "Error scanning barcode",
@@ -61,7 +62,7 @@ export const useBarcodeScanner = ({
     },
     timeBetweenDecodingAttempts: 150,
     hints,
-    enabled,
+    // We'll control the scanning through the video stream instead of the enabled prop
   });
 
   return { ref };
