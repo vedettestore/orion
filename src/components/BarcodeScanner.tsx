@@ -2,7 +2,6 @@ import { useZxing } from "react-zxing";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import {
   Select,
   SelectContent,
@@ -12,7 +11,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
-export const BarcodeScanner = () => {
+interface BarcodeScannerProps {
+  onScan?: (barcode: string) => void;
+}
+
+export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
   const [isScanning, setIsScanning] = useState(false);
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>("");
@@ -43,64 +46,13 @@ export const BarcodeScanner = () => {
     getDevices();
   }, []);
 
-  const handleScanCount = async (scannedCode: string) => {
-    try {
-      // First, check if the item exists in inventory
-      const { data: inventoryItem, error: inventoryError } = await supabase
-        .from("inventory")
-        .select("id, name")
-        .eq("barcode", scannedCode)
-        .single();
-
-      if (inventoryError || !inventoryItem) {
-        toast({
-          variant: "destructive",
-          title: "Item Not Found",
-          description: "This barcode is not registered in inventory",
-        });
-        return;
-      }
-
-      // Insert scan count
-      const { error: scanError } = await supabase
-        .from("scan_counts")
-        .insert({
-          inventory_id: inventoryItem.id,
-          count: quantity,
-          scanned_by: (await supabase.auth.getUser()).data.user?.id,
-        });
-
-      if (scanError) throw scanError;
-
-      // Update inventory quantity
-      const { error: updateError } = await supabase
-        .from("inventory")
-        .update({ quantity: quantity })
-        .eq("id", inventoryItem.id);
-
-      if (updateError) throw updateError;
-
-      toast({
-        title: "Count Saved",
-        description: `Saved ${quantity} units of ${inventoryItem.name}`,
-      });
-
-      setLastScannedCode(scannedCode);
-      setQuantity(1); // Reset quantity for next scan
-    } catch (error) {
-      console.error("Error saving scan count:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to save scan count",
-      });
-    }
-  };
-
   const { ref } = useZxing({
     onDecodeResult(result) {
       const scannedCode = result.getText();
-      handleScanCount(scannedCode);
+      if (onScan) {
+        onScan(scannedCode);
+      }
+      setLastScannedCode(scannedCode);
       setIsScanning(false);
     },
     onError(error) {
