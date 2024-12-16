@@ -1,12 +1,19 @@
+import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText } from "lucide-react";
+import { Plus, FileText, Edit } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CreatePackingListForm } from "@/components/packing-lists/CreatePackingListForm";
+import { EditPackingListForm } from "@/components/packing-lists/EditPackingListForm";
 
 const PackingLists = () => {
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedList, setSelectedList] = useState<any>(null);
+
   const { data: packingLists, isLoading } = useQuery({
     queryKey: ['packing-lists'],
     queryFn: async () => {
@@ -32,6 +39,11 @@ const PackingLists = () => {
     },
   });
 
+  const handleEdit = (list: any) => {
+    setSelectedList(list);
+    setEditDialogOpen(true);
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
@@ -47,7 +59,10 @@ const PackingLists = () => {
                 <FileText className="mr-2 h-4 w-4" />
                 Export Lists
               </Button>
-              <Button className="bg-soft-blue hover:bg-soft-blue/90 text-gray-800">
+              <Button 
+                className="bg-primary hover:bg-primary/90"
+                onClick={() => setCreateDialogOpen(true)}
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 New Packing List
               </Button>
@@ -75,15 +90,25 @@ const PackingLists = () => {
                       <h3 className="font-semibold">Order #{list.order_number}</h3>
                       <p className="text-sm text-muted-foreground">{list.customer_name}</p>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      list.status === 'completed' 
-                        ? 'bg-green-100 text-green-800'
-                        : list.status === 'in_progress'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {list.status}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => handleEdit(list)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        list.status === 'completed' 
+                          ? 'bg-green-100 text-green-800'
+                          : list.status === 'in_progress'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {list.status}
+                      </span>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-gray-600">
@@ -92,10 +117,28 @@ const PackingLists = () => {
                     <p className="text-sm text-gray-600">
                       Created: {new Date(list.created_at).toLocaleDateString()}
                     </p>
+                    {list.notes && (
+                      <p className="text-sm text-gray-600 mt-2">
+                        Notes: {list.notes}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
+          )}
+
+          <CreatePackingListForm
+            open={createDialogOpen}
+            onOpenChange={setCreateDialogOpen}
+          />
+
+          {selectedList && (
+            <EditPackingListForm
+              list={selectedList}
+              open={editDialogOpen}
+              onOpenChange={setEditDialogOpen}
+            />
           )}
         </main>
       </div>
