@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
-import { ComboboxDemo } from "./SkuCombobox";
-import { Textarea } from "@/components/ui/textarea";
+import { ShippingDetailsForm } from "./ShippingDetailsForm";
+import { LineItems } from "./LineItems";
+import { FormActions } from "./FormActions";
 
 interface CreatePurchaseOrderProps {
   onSuccess: () => void;
@@ -23,10 +20,6 @@ export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
   >([]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
-
-  const handleAddItem = () => {
-    setSelectedItems([...selectedItems, { sku: "", quantity: 1 }]);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,81 +76,18 @@ export function CreatePurchaseOrder({ onSuccess }: CreatePurchaseOrderProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="customerName">Customer Name</Label>
-          <Input
-            id="customerName"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            required
-          />
-        </div>
+      <ShippingDetailsForm
+        customerName={customerName}
+        shippingAddress={shippingAddress}
+        shippingMethod={shippingMethod}
+        onCustomerNameChange={setCustomerName}
+        onShippingAddressChange={setShippingAddress}
+        onShippingMethodChange={setShippingMethod}
+      />
 
-        <div>
-          <Label htmlFor="shippingAddress">Shipping Address</Label>
-          <Textarea
-            id="shippingAddress"
-            value={shippingAddress}
-            onChange={(e) => setShippingAddress(e.target.value)}
-            required
-          />
-        </div>
+      <LineItems items={selectedItems} onItemChange={setSelectedItems} />
 
-        <div>
-          <Label htmlFor="shippingMethod">Shipping Method</Label>
-          <Input
-            id="shippingMethod"
-            value={shippingMethod}
-            onChange={(e) => setShippingMethod(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="space-y-4">
-          {selectedItems.map((item, index) => (
-            <div key={index} className="flex gap-4">
-              <div className="flex-1">
-                <ComboboxDemo
-                  value={item.sku}
-                  onChange={(value) => {
-                    const newItems = [...selectedItems];
-                    newItems[index].sku = value;
-                    setSelectedItems(newItems);
-                  }}
-                />
-              </div>
-              <div className="w-24">
-                <Input
-                  type="number"
-                  min="1"
-                  value={item.quantity}
-                  onChange={(e) => {
-                    const newItems = [...selectedItems];
-                    newItems[index].quantity = parseInt(e.target.value);
-                    setSelectedItems(newItems);
-                  }}
-                  required
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <Button type="button" variant="outline" onClick={handleAddItem}>
-          Add Item
-        </Button>
-      </div>
-
-      <div className="flex justify-end gap-4">
-        <Button type="button" variant="outline" onClick={onSuccess}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isLoading}>
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Create Order
-        </Button>
-      </div>
+      <FormActions isLoading={isLoading} onCancel={onSuccess} />
     </form>
   );
 }
