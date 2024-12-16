@@ -174,6 +174,84 @@ export type Database = {
         }
         Relationships: []
       }
+      purchase_order_items: {
+        Row: {
+          created_at: string | null
+          id: number
+          inventory_id: number | null
+          purchase_order_id: number | null
+          quantity: number
+          total_price: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          inventory_id?: number | null
+          purchase_order_id?: number | null
+          quantity?: number
+          total_price?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          inventory_id?: number | null
+          purchase_order_id?: number | null
+          quantity?: number
+          total_price?: number | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_order_items_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_order_items_purchase_order_id_fkey"
+            columns: ["purchase_order_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      purchase_orders: {
+        Row: {
+          created_by: string | null
+          customer_name: string | null
+          date_ordered: string | null
+          id: number
+          notes: string | null
+          order_total: number | null
+          po_number: string
+          status: string | null
+        }
+        Insert: {
+          created_by?: string | null
+          customer_name?: string | null
+          date_ordered?: string | null
+          id?: number
+          notes?: string | null
+          order_total?: number | null
+          po_number: string
+          status?: string | null
+        }
+        Update: {
+          created_by?: string | null
+          customer_name?: string | null
+          date_ordered?: string | null
+          id?: number
+          notes?: string | null
+          order_total?: number | null
+          po_number?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
       scan_counts: {
         Row: {
           batch_id: string | null

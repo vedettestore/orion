@@ -9,6 +9,7 @@ import History from "./pages/History";
 import Settings from "./pages/Settings";
 import PackingLists from "./pages/PackingLists";
 import PickPack from "./pages/PickPack";
+import Purchasing from "./pages/Purchasing";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 export const routes = [
@@ -85,6 +86,14 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <PickPack />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/purchasing",
+    element: (
+      <ProtectedRoute>
+        <Purchasing />
       </ProtectedRoute>
     ),
   },
