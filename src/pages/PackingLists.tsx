@@ -13,8 +13,14 @@ const PackingLists = () => {
       const { data, error } = await supabase
         .from("packing_lists")
         .select(`
-          *,
-          created_by_profile:profiles!packing_lists_created_by_fkey(display_name)
+          id,
+          order_number,
+          customer_name,
+          status,
+          created_at,
+          created_by,
+          notes,
+          created_by_profile:profiles(display_name)
         `)
         .order("created_at", { ascending: false });
 

@@ -13,11 +13,14 @@ import { useNavigate } from "react-router-dom";
 interface PackingList {
   id: number;
   order_number: string;
-  customer_name: string;
-  status: string;
-  created_at: string;
+  customer_name: string | null;
+  status: string | null;
+  created_at: string | null;
   created_by: string | null;
-  created_by_profile?: { display_name: string | null } | null;
+  notes: string | null;
+  created_by_profile: {
+    display_name: string | null;
+  } | null;
 }
 
 interface PackingListTableProps {
@@ -69,7 +72,7 @@ export const PackingListTable = ({ data, isLoading }: PackingListTableProps) => 
               </TableCell>
               <TableCell>{list.created_by_profile?.display_name || "Unknown"}</TableCell>
               <TableCell>
-                {new Date(list.created_at).toLocaleDateString()}
+                {list.created_at ? new Date(list.created_at).toLocaleDateString() : "N/A"}
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
