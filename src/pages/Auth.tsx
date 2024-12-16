@@ -49,14 +49,9 @@ const AuthPage = () => {
                   },
                 },
                 className: {
-                  input: 'pl-10',
+                  input: 'pl-10 relative',
                   container: 'gap-3',
                   button: 'py-2',
-                },
-                extend: {
-                  input: {
-                    position: 'relative',
-                  },
                 },
               }}
               providers={[]}
