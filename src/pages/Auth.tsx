@@ -3,6 +3,7 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { Mail, Lock } from "lucide-react";
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -30,24 +31,39 @@ const AuthPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white p-8 rounded-lg shadow-sm">
-          <h1 className="text-2xl font-bold text-center mb-6">Orion Manufacturing</h1>
-          <Auth
-            supabaseClient={supabase}
-            appearance={{
-              theme: ThemeSupa,
-              variables: {
-                default: {
-                  colors: {
-                    brand: '#bf7a8c',
-                    brandAccent: '#a66475',
+      <div className="w-full max-w-sm">
+        <div className="bg-[#000000e6] p-6 rounded-lg shadow-sm">
+          <h1 className="text-xl font-semibold text-center mb-6 text-white">Orion Manufacturing</h1>
+          <div className="relative">
+            <Auth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      brand: '#bf7a8c',
+                      brandAccent: '#a66475',
+                      inputBackground: '#333333',
+                    },
                   },
                 },
-              },
-            }}
-            providers={[]}
-          />
+                className: {
+                  input: 'pl-10',
+                  container: 'gap-3',
+                  button: 'py-2',
+                },
+                extend: {
+                  input: {
+                    position: 'relative',
+                  },
+                },
+              }}
+              providers={[]}
+            />
+            <Mail className="absolute text-gray-400 left-3 top-[59px] h-5 w-5 pointer-events-none" />
+            <Lock className="absolute text-gray-400 left-3 top-[127px] h-5 w-5 pointer-events-none" />
+          </div>
         </div>
       </div>
     </div>
