@@ -1,5 +1,5 @@
 import { useZxing } from "react-zxing";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { Barcode } from "lucide-react";
@@ -18,6 +18,27 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [lastScannedCode, setLastScannedCode] = useState<string>("");
+
+  const playBeep = useCallback(() => {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.1);
+
+    // Clean up
+    setTimeout(() => {
+      audioContext.close();
+    }, 200);
+  }, []);
 
   useEffect(() => {
     const getDevices = async () => {
@@ -69,6 +90,7 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
     onDecodeResult(result) {
       const scannedCode = result.getText();
       console.log("Barcode scanned:", scannedCode); // Debug log
+      playBeep(); // Play beep sound on successful scan
       if (onScan) {
         onScan(scannedCode);
       }
