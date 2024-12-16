@@ -43,20 +43,29 @@ const PackingLists = () => {
 
   const { mutate: deleteList } = useMutation({
     mutationFn: async (id: number) => {
-      const { error } = await supabase
+      // First delete all related packing list items
+      const { error: itemsError } = await supabase
+        .from('packing_list_items')
+        .delete()
+        .eq('packing_list_id', id);
+
+      if (itemsError) throw itemsError;
+
+      // Then delete the packing list itself
+      const { error: listError } = await supabase
         .from('packing_lists')
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (listError) throw listError;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['packing-lists'] });
       toast.success('Packing list deleted successfully');
     },
     onError: (error) => {
-      toast.error('Failed to delete packing list');
       console.error('Error deleting packing list:', error);
+      toast.error('Failed to delete packing list');
     },
   });
 
