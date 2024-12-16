@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { X } from "lucide-react";
 
 interface InventoryItem {
   id: number;
@@ -42,7 +43,7 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
   const queryClient = useQueryClient();
 
   const { mutate: updateItem, isPending } = useMutation({
-    mutationFn: async (values: Partial<InventoryItem>) => {
+    mutationFn: async (values: Partial<Omit<InventoryItem, 'id'>>) => {
       const { error } = await supabase
         .from("inventory")
         .update(values)
@@ -61,15 +62,25 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
     },
   });
 
-  const onSubmit = (values: Partial<InventoryItem>) => {
+  const onSubmit = (values: Partial<Omit<InventoryItem, 'id'>>) => {
     updateItem(values);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Edit Inventory Item</DialogTitle>
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-xl font-semibold">Edit Inventory Item</DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6"
+              onClick={() => onOpenChange(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -78,9 +89,9 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel className="text-gray-700">Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="focus-visible:ring-primary" />
                   </FormControl>
                 </FormItem>
               )}
@@ -90,9 +101,9 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type</FormLabel>
+                  <FormLabel className="text-gray-700">Type</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="focus-visible:ring-primary" />
                   </FormControl>
                 </FormItem>
               )}
@@ -102,9 +113,9 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
               name="sku"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>SKU</FormLabel>
+                  <FormLabel className="text-gray-700">SKU</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="focus-visible:ring-primary" />
                   </FormControl>
                 </FormItem>
               )}
@@ -114,9 +125,9 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Status</FormLabel>
+                  <FormLabel className="text-gray-700">Status</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="focus-visible:ring-primary" />
                   </FormControl>
                 </FormItem>
               )}
@@ -126,14 +137,14 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
               name="image url"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image URL</FormLabel>
+                  <FormLabel className="text-gray-700">Image URL</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="focus-visible:ring-primary" />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"
                 variant="outline"
@@ -141,7 +152,11 @@ export const EditInventoryForm = ({ item, open, onOpenChange }: EditInventoryFor
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button 
+                type="submit" 
+                disabled={isPending}
+                className="bg-primary hover:bg-primary/90"
+              >
                 {isPending ? "Saving..." : "Save Changes"}
               </Button>
             </div>

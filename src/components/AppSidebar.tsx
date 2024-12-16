@@ -8,27 +8,40 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Warehouse, Box, Boxes, BarChart2, Settings, Users, History } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Package2, 
+  BoxesIcon,
+  Building2, 
+  Users2, 
+  History, 
+  Settings2,
+  ChevronRight
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
-  { title: "Dashboard", icon: BarChart2, url: "/" },
-  { title: "Inventory", icon: Boxes, url: "/inventory" },
-  { title: "Items", icon: Box, url: "/items" },
-  { title: "Locations", icon: Warehouse, url: "/locations" },
-  { title: "Team", icon: Users, url: "/team" },
+  { title: "Dashboard", icon: LayoutDashboard, url: "/" },
+  { title: "Inventory", icon: Package2, url: "/inventory" },
+  { title: "Items", icon: BoxesIcon, url: "/items" },
+  { title: "Locations", icon: Building2, url: "/locations" },
+  { title: "Team", icon: Users2, url: "/team" },
   { title: "History", icon: History, url: "/history" },
-  { title: "Settings", icon: Settings, url: "/settings" },
+  { title: "Settings", icon: Settings2, url: "/settings" },
 ];
 
 export function AppSidebar() {
   const location = useLocation();
 
   return (
-    <Sidebar>
+    <Sidebar className="bg-gradient-to-b from-white to-gray-50 border-r border-gray-200">
       <SidebarContent>
+        <div className="px-6 py-5 mb-6">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            Warehouse
+          </h1>
+        </div>
         <SidebarGroup>
-          <SidebarGroupLabel>Warehouse Management</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -36,16 +49,23 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <Link
                       to={item.url}
-                      className={`flex items-center gap-3 transition-all duration-300 ease-in-out rounded-md hover:bg-white/10 ${
+                      className={`flex items-center justify-between px-6 py-3 w-full transition-all duration-300 ease-in-out rounded-lg hover:bg-primary/10 group ${
                         location.pathname === item.url 
-                          ? 'text-primary bg-white/10 scale-[1.02] transform' 
-                          : 'hover:scale-[1.02] transform'
+                          ? 'text-primary bg-primary/10 font-medium' 
+                          : 'text-gray-600 hover:text-primary'
                       }`}
                     >
-                      <item.icon className={`h-5 w-5 transition-transform duration-300 ${
-                        location.pathname === item.url ? 'scale-110' : ''
+                      <div className="flex items-center gap-3">
+                        <item.icon className={`h-5 w-5 transition-transform duration-300 ${
+                          location.pathname === item.url ? 'text-primary' : 'group-hover:text-primary'
+                        }`} />
+                        <span>{item.title}</span>
+                      </div>
+                      <ChevronRight className={`h-4 w-4 transition-transform duration-300 ${
+                        location.pathname === item.url 
+                          ? 'text-primary rotate-90' 
+                          : 'text-gray-400 group-hover:translate-x-1'
                       }`} />
-                      <span className="transition-colors duration-300">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
