@@ -118,15 +118,7 @@ export type Database = {
           scanned_at?: string | null
           scanned_by?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "scan_counts_inventory_id_fkey"
-            columns: ["inventory_id"]
-            isOneToOne: false
-            referencedRelation: "inventory"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
