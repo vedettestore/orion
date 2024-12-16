@@ -19,35 +19,50 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
   const [lastScannedCode, setLastScannedCode] = useState<string>("");
   const { devices, selectedDevice, setSelectedDevice } = useCameraDevices();
   const { playBeep } = useBeepSound();
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
   const handleScanSuccess = (scannedCode: string) => {
     playBeep();
     setLastScannedCode(scannedCode);
-    toast({
-      title: "Barcode Scanned",
-      description: `Code: ${scannedCode}`,
-    });
-    setIsScanning(false);
+    if (onScan) {
+      onScan(scannedCode);
+    }
+    stopScanning();
   };
 
   const { ref } = useBarcodeScanner({
     selectedDevice,
     onScan,
     onSuccess: handleScanSuccess,
+    enabled: isScanning,
   });
+
+  const stopScanning = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+    setIsScanning(false);
+  };
 
   const handleStartScanning = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      if (stream) {
+        stopScanning();
+      }
+
+      const newStream = await navigator.mediaDevices.getUserMedia({
         video: {
           deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
           facingMode: "environment",
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
         },
       });
-      if (stream) {
-        setIsScanning(true);
-        console.log("Camera stream started");
-      }
+
+      setStream(newStream);
+      setIsScanning(true);
+      console.log("Camera stream started successfully");
     } catch (error) {
       console.error("Error accessing camera:", error);
       toast({
@@ -72,7 +87,7 @@ export const BarcodeScanner = ({ onScan }: BarcodeScannerProps) => {
       {isScanning ? (
         <ScannerPreview
           videoRef={ref}
-          onCancel={() => setIsScanning(false)}
+          onCancel={stopScanning}
         />
       ) : (
         <Button

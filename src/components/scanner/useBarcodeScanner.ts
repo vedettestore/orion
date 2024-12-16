@@ -7,9 +7,15 @@ interface UseBarcodeScannerProps {
   selectedDevice: string;
   onScan?: (barcode: string) => void;
   onSuccess: (code: string) => void;
+  enabled?: boolean;
 }
 
-export const useBarcodeScanner = ({ selectedDevice, onScan, onSuccess }: UseBarcodeScannerProps) => {
+export const useBarcodeScanner = ({ 
+  selectedDevice, 
+  onScan, 
+  onSuccess,
+  enabled = true 
+}: UseBarcodeScannerProps) => {
   const hints = new Map();
   hints.set(DecodeHintType.POSSIBLE_FORMATS, [
     BarcodeFormat.QR_CODE,
@@ -22,7 +28,6 @@ export const useBarcodeScanner = ({ selectedDevice, onScan, onSuccess }: UseBarc
   ]);
   hints.set(DecodeHintType.TRY_HARDER, true);
   hints.set(DecodeHintType.ASSUME_GS1, true);
-  hints.set(DecodeHintType.CHARACTER_SET, "UTF-8");
 
   const { ref } = useZxing({
     onDecodeResult(result) {
@@ -34,12 +39,17 @@ export const useBarcodeScanner = ({ selectedDevice, onScan, onSuccess }: UseBarc
       onSuccess(scannedCode);
     },
     onError(error) {
-      console.error("Scanning error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error scanning barcode",
-        description: "Please try again",
-      });
+      // Only show errors if we're actively scanning
+      if (enabled) {
+        console.error("Scanning error:", error);
+        if (error.message !== "Stream not initialized.") {
+          toast({
+            variant: "destructive",
+            title: "Error scanning barcode",
+            description: "Please try again",
+          });
+        }
+      }
     },
     constraints: {
       video: {
@@ -47,12 +57,11 @@ export const useBarcodeScanner = ({ selectedDevice, onScan, onSuccess }: UseBarc
         facingMode: "environment",
         width: { ideal: 1280 },
         height: { ideal: 720 },
-        aspectRatio: { ideal: 1.7777777778 },
-        frameRate: { ideal: 30 },
       },
     },
     timeBetweenDecodingAttempts: 150,
     hints,
+    enabled,
   });
 
   return { ref };
