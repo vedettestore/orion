@@ -39,13 +39,12 @@ const AuthPage = () => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state change:', event, session);
-      
       if (event === 'SIGNED_IN' && session) {
         navigate("/");
       } else if (event === 'SIGNED_OUT') {
         navigate("/auth");
       } else if (event === 'TOKEN_REFRESHED') {
+        // Handle successful token refresh
         if (session) {
           navigate("/");
         }
@@ -89,22 +88,17 @@ const AuthPage = () => {
                   sign_in: {
                     email_label: 'Email',
                     password_label: 'Password',
-                    button_label: 'Sign In',
-                    loading_button_label: 'Signing in...',
-                    email_input_placeholder: 'Your email address',
-                    password_input_placeholder: 'Your password',
                   },
                 },
               }}
-              onError={(error) => {
-                console.error('Auth error:', error);
-                toast({
-                  variant: "destructive",
-                  title: "Authentication Error",
-                  description: error.message === "Invalid login credentials" 
-                    ? "Invalid email or password. Please try again."
-                    : error.message,
-                });
+              {...{
+                onError: (error) => {
+                  toast({
+                    variant: "destructive",
+                    title: "Authentication Error",
+                    description: error.message,
+                  });
+                },
               }}
             />
             <Mail className="absolute text-gray-400 left-3 top-[59px] h-5 w-5 pointer-events-none" />
