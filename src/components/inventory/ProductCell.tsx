@@ -1,12 +1,14 @@
 import { Package2 } from "lucide-react";
 import { TableCell } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface ProductCellProps {
   name: string;
   imageUrl?: string;
+  isVariant?: boolean;
 }
 
-export const ProductCell = ({ name, imageUrl }: ProductCellProps) => {
+export const ProductCell = ({ name, imageUrl, isVariant }: ProductCellProps) => {
   return (
     <TableCell className="flex items-center gap-3">
       {imageUrl ? (
@@ -20,7 +22,12 @@ export const ProductCell = ({ name, imageUrl }: ProductCellProps) => {
           <Package2 className="w-5 h-5 text-gray-400" />
         </div>
       )}
-      <span className="font-medium text-gray-900">{name}</span>
+      <span className={cn(
+        "text-gray-900",
+        isVariant && "pl-4 text-sm"
+      )}>
+        {name}
+      </span>
     </TableCell>
   );
 };

@@ -19,7 +19,9 @@ export type Database = {
           "image url": string | null
           "inventory policy": string | null
           "inventory tracker": string | null
+          is_variant: boolean | null
           name: string
+          parent_id: number | null
           price: number | null
           size: string | null
           sku: string | null
@@ -37,7 +39,9 @@ export type Database = {
           "image url"?: string | null
           "inventory policy"?: string | null
           "inventory tracker"?: string | null
+          is_variant?: boolean | null
           name: string
+          parent_id?: number | null
           price?: number | null
           size?: string | null
           sku?: string | null
@@ -55,7 +59,9 @@ export type Database = {
           "image url"?: string | null
           "inventory policy"?: string | null
           "inventory tracker"?: string | null
+          is_variant?: boolean | null
           name?: string
+          parent_id?: number | null
           price?: number | null
           size?: string | null
           sku?: string | null
@@ -64,7 +70,15 @@ export type Database = {
           type?: string | null
           "variant image url"?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "inventory_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       packing_list_items: {
         Row: {
