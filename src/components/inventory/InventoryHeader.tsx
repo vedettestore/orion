@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 import { Search, Upload, Download, Edit2 } from "lucide-react";
 import { exportInventoryToCSV, importInventoryFromCSV } from "@/utils/csvUtils";
 
-export const InventoryHeader = () => {
+interface InventoryHeaderProps {
+  onSearch: (term: string) => void;
+  searchTerm: string;
+}
+
+export const InventoryHeader = ({ onSearch, searchTerm }: InventoryHeaderProps) => {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -59,8 +64,10 @@ export const InventoryHeader = () => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
           <Input
-            placeholder="Search inventory..."
+            placeholder="Search by SKU..."
             className="pl-10 bg-white"
+            value={searchTerm}
+            onChange={(e) => onSearch(e.target.value)}
           />
         </div>
       </div>

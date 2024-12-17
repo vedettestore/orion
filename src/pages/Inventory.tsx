@@ -5,8 +5,11 @@ import { InventoryHeader } from "@/components/inventory/InventoryHeader";
 import { InventoryTable } from "@/components/inventory/InventoryTable";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { useState } from "react";
 
 const Inventory = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
@@ -21,14 +24,18 @@ const Inventory = () => {
     },
   });
 
+  const filteredItems = inventoryItems?.filter(item => 
+    item.sku?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar />
         <main className="flex-1 p-4 md:p-8">
-          <InventoryHeader />
+          <InventoryHeader onSearch={setSearchTerm} searchTerm={searchTerm} />
           <div className="rounded-lg border bg-card">
-            <InventoryTable data={inventoryItems || []} isLoading={isLoading} />
+            <InventoryTable data={filteredItems} isLoading={isLoading} />
           </div>
         </main>
       </div>
