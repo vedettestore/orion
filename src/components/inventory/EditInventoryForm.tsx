@@ -14,6 +14,7 @@ import { X } from "lucide-react";
 import { FormFields } from "./FormFields";
 import { VariantForm } from "./VariantForm";
 import { useState } from "react";
+import { Json } from "@/integrations/supabase/types";
 
 interface InventoryItem {
   id: number;
@@ -26,7 +27,7 @@ interface InventoryItem {
   barcode?: string;
   is_variant?: boolean;
   parent_id?: number | null;
-  variant_attributes?: Record<string, any>;
+  variant_attributes?: Json;
 }
 
 interface EditInventoryFormProps {

@@ -13,6 +13,7 @@ import { ActionButtons } from "./ActionButtons";
 import { EditInventoryForm } from "./EditInventoryForm";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
+import { Json } from "@/integrations/supabase/types";
 
 interface InventoryItem {
   id: number;
@@ -25,7 +26,7 @@ interface InventoryItem {
   barcode?: string;
   is_variant?: boolean;
   parent_id?: number | null;
-  variant_attributes?: Record<string, any>;
+  variant_attributes?: Json;
 }
 
 interface InventoryTableProps {
@@ -64,11 +65,11 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     );
   }
 
-  const renderVariantAttributes = (attributes?: Record<string, any>) => {
-    if (!attributes) return null;
+  const renderVariantAttributes = (attributes?: Json) => {
+    if (!attributes || typeof attributes !== 'object') return null;
     return (
       <div className="text-sm text-gray-500">
-        {Object.entries(attributes).map(([key, value]) => (
+        {Object.entries(attributes as Record<string, any>).map(([key, value]) => (
           <span key={key} className="mr-2">
             {key}: {value}
           </span>
