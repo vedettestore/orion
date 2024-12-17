@@ -19,15 +19,15 @@ export type Database = {
           "image url": string | null
           "inventory policy": string | null
           "inventory tracker": string | null
-          is_variant: boolean | null
           name: string
-          parent_id: number | null
           price: number | null
+          quantity: number | null
           size: string | null
           sku: string | null
           status: string | null
           tags: string | null
           type: string | null
+          upc_code: string | null
           "variant image url": string | null
         }
         Insert: {
@@ -35,19 +35,19 @@ export type Database = {
           category?: string | null
           color?: string | null
           description?: string | null
-          id?: number
+          id?: never
           "image url"?: string | null
           "inventory policy"?: string | null
           "inventory tracker"?: string | null
-          is_variant?: boolean | null
           name: string
-          parent_id?: number | null
           price?: number | null
+          quantity?: number | null
           size?: string | null
           sku?: string | null
           status?: string | null
           tags?: string | null
           type?: string | null
+          upc_code?: string | null
           "variant image url"?: string | null
         }
         Update: {
@@ -55,30 +55,22 @@ export type Database = {
           category?: string | null
           color?: string | null
           description?: string | null
-          id?: number
+          id?: never
           "image url"?: string | null
           "inventory policy"?: string | null
           "inventory tracker"?: string | null
-          is_variant?: boolean | null
           name?: string
-          parent_id?: number | null
           price?: number | null
+          quantity?: number | null
           size?: string | null
           sku?: string | null
           status?: string | null
           tags?: string | null
           type?: string | null
+          upc_code?: string | null
           "variant image url"?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "inventory_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "inventory"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       packing_list_items: {
         Row: {
@@ -112,6 +104,13 @@ export type Database = {
           status?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "packing_list_items_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "packing_list_items_packing_list_id_fkey"
             columns: ["packing_list_id"]
@@ -204,6 +203,13 @@ export type Database = {
           unit_price?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "purchase_order_items_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "purchase_order_items_purchase_order_id_fkey"
             columns: ["purchase_order_id"]
@@ -375,6 +381,21 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      test_inventory: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: never
+          name: string
+        }
+        Update: {
+          id?: never
+          name?: string
+        }
+        Relationships: []
       }
     }
     Views: {
