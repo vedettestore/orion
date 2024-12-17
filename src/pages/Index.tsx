@@ -2,17 +2,14 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { StatsCard } from "@/components/StatsCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
-import { Box, Boxes, Users, AlertTriangle, LogOut } from "lucide-react";
+import { Box, Boxes, Users, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarcodeScanner } from "@/components/scanner/BarcodeScanner";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Index = () => {
-  const navigate = useNavigate();
-
   const { data: inventoryItems } = useQuery({
     queryKey: ['inventory'],
     queryFn: async () => {
@@ -32,15 +29,6 @@ const Index = () => {
   const handleScan = (barcode: string) => {
     console.log("Barcode scanned:", barcode);
     toast.success(`Scanned barcode: ${barcode}`);
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      navigate("/auth");
-    } catch (error) {
-      toast.error("Error signing out");
-    }
   };
 
   return (
@@ -64,14 +52,6 @@ const Index = () => {
                 className="flex-1 md:flex-none bg-soft-blue hover:bg-soft-blue/90 text-gray-800"
               >
                 Add Item
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={handleSignOut}
-                className="flex-1 md:flex-none"
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign out
               </Button>
             </div>
           </div>

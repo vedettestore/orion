@@ -1,11 +1,23 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { menuItems } from "./AppSidebar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export function MobileDrawer() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/auth");
+    } catch (error) {
+      toast.error("Error signing out");
+    }
+  };
 
   return (
     <Sheet>
@@ -45,6 +57,15 @@ export function MobileDrawer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-400 hover:bg-gray-800 hover:text-primary w-full"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Sign Out</span>
+                </button>
+              </li>
             </ul>
           </nav>
         </div>
