@@ -21,6 +21,7 @@ interface InventoryItem {
   status?: string;
   "image url"?: string;
   quantity?: number;
+  barcode?: string;
 }
 
 interface EditInventoryFormProps {
@@ -42,6 +43,7 @@ export const EditInventoryForm = ({
       status: item.status || "",
       "image url": item["image url"] || "",
       quantity: item.quantity || 0,
+      barcode: item.barcode || "",
     },
   });
 
