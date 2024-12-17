@@ -20,6 +20,7 @@ export type Database = {
           "inventory policy": string | null
           "inventory tracker": string | null
           is_variant: boolean | null
+          low_stock_threshold: number | null
           name: string
           parent_id: number | null
           price: number | null
@@ -29,6 +30,7 @@ export type Database = {
           tags: string | null
           type: string | null
           "variant image url": string | null
+          warehouse_location: string | null
         }
         Insert: {
           barcode?: string | null
@@ -40,6 +42,7 @@ export type Database = {
           "inventory policy"?: string | null
           "inventory tracker"?: string | null
           is_variant?: boolean | null
+          low_stock_threshold?: number | null
           name: string
           parent_id?: number | null
           price?: number | null
@@ -49,6 +52,7 @@ export type Database = {
           tags?: string | null
           type?: string | null
           "variant image url"?: string | null
+          warehouse_location?: string | null
         }
         Update: {
           barcode?: string | null
@@ -60,6 +64,7 @@ export type Database = {
           "inventory policy"?: string | null
           "inventory tracker"?: string | null
           is_variant?: boolean | null
+          low_stock_threshold?: number | null
           name?: string
           parent_id?: number | null
           price?: number | null
@@ -69,6 +74,7 @@ export type Database = {
           tags?: string | null
           type?: string | null
           "variant image url"?: string | null
+          warehouse_location?: string | null
         }
         Relationships: [
           {
@@ -255,6 +261,42 @@ export type Database = {
         }
         Relationships: []
       }
+      purchase_orders_suppliers: {
+        Row: {
+          created_at: string | null
+          id: number
+          purchase_order_id: number | null
+          supplier_id: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          purchase_order_id?: number | null
+          supplier_id?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          purchase_order_id?: number | null
+          supplier_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_orders_suppliers_purchase_order_id_fkey"
+            columns: ["purchase_order_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_orders_suppliers_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scan_counts: {
         Row: {
           batch_id: string | null
@@ -375,6 +417,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      suppliers: {
+        Row: {
+          address: string | null
+          created_at: string | null
+          email: string | null
+          id: number
+          name: string
+          phone: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          name: string
+          phone?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          name?: string
+          phone?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

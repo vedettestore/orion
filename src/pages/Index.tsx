@@ -2,20 +2,22 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { StatsCard } from "@/components/StatsCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
-import { Box, Boxes, Users, AlertTriangle } from "lucide-react";
+import { Box, Boxes, TrendingUp, AlertTriangle, Package, Truck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarcodeScanner } from "@/components/scanner/BarcodeScanner";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Index = () => {
+  // Query for inventory items with low stock alert
   const { data: inventoryItems } = useQuery({
     queryKey: ['inventory'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('inventory')
-        .select('*');
+        .select('*, low_stock_threshold');
       
       if (error) {
         toast.error('Failed to fetch inventory');
@@ -25,6 +27,35 @@ const Index = () => {
       return data;
     },
   });
+
+  // Query for recent purchase orders
+  const { data: recentOrders } = useQuery({
+    queryKey: ['recent-orders'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('purchase_orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+      
+      if (error) {
+        toast.error('Failed to fetch recent orders');
+        throw error;
+      }
+      
+      return data;
+    },
+  });
+
+  // Calculate metrics
+  const lowStockItems = inventoryItems?.filter(
+    item => item.low_stock_threshold && item.quantity <= item.low_stock_threshold
+  ) || [];
+
+  const totalValue = inventoryItems?.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
+    0
+  ) || 0;
 
   const handleScan = (barcode: string) => {
     console.log("Barcode scanned:", barcode);
@@ -44,42 +75,52 @@ const Index = () => {
             <div className="flex flex-wrap gap-2 md:gap-4 w-full md:w-auto">
               <Button 
                 variant="outline" 
-                className="flex-1 md:flex-none bg-soft-gray hover:bg-soft-gray/90"
+                className="flex-1 md:flex-none"
               >
                 Export Report
               </Button>
               <Button 
-                className="flex-1 md:flex-none bg-soft-blue hover:bg-soft-blue/90 text-gray-800"
+                className="flex-1 md:flex-none"
               >
                 Add Item
               </Button>
             </div>
           </div>
 
+          {lowStockItems.length > 0 && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Low Stock Alert</AlertTitle>
+              <AlertDescription>
+                {lowStockItems.length} items are below their minimum stock threshold
+              </AlertDescription>
+            </Alert>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:mb-8">
             <StatsCard
               title="Total Items"
               value={inventoryItems?.length.toString() || "0"}
               icon={Box}
-              description="+20.1% from last month"
+              description="Total unique products"
             />
             <StatsCard
               title="Low Stock Items"
-              value="12"
+              value={lowStockItems.length.toString()}
               icon={AlertTriangle}
               description="Items below threshold"
             />
             <StatsCard
-              title="Storage Locations"
-              value="8"
-              icon={Boxes}
-              description="Across 3 warehouses"
+              title="Inventory Value"
+              value={`$${totalValue.toFixed(2)}`}
+              icon={TrendingUp}
+              description="Total stock value"
             />
             <StatsCard
-              title="Team Members"
-              value="24"
-              icon={Users}
-              description="Active this week"
+              title="Recent Orders"
+              value={recentOrders?.length.toString() || "0"}
+              icon={Package}
+              description="Orders this week"
             />
           </div>
 
