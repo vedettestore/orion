@@ -1,21 +1,18 @@
-import { Navigate } from "react-router-dom";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Inventory from "./pages/Inventory";
-import Items from "./pages/Items";
-import Locations from "./pages/Locations";
-import Team from "./pages/Team";
-import History from "./pages/History";
-import Settings from "./pages/Settings";
-import PickPack from "./pages/PickPack";
-import Purchasing from "./pages/Purchasing";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { createBrowserRouter } from "react-router-dom";
+import Index from "@/pages/Index";
+import Auth from "@/pages/Auth";
+import Inventory from "@/pages/Inventory";
+import Items from "@/pages/Items";
+import BulkEdit from "@/pages/BulkEdit";
+import PickPack from "@/pages/PickPack";
+import Purchasing from "@/pages/Purchasing";
+import History from "@/pages/History";
+import Locations from "@/pages/Locations";
+import Settings from "@/pages/Settings";
+import Team from "@/pages/Team";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-export const routes = [
-  {
-    path: "/auth",
-    element: <Auth />,
-  },
+export const router = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -23,6 +20,10 @@ export const routes = [
         <Index />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
   },
   {
     path: "/inventory",
@@ -33,42 +34,18 @@ export const routes = [
     ),
   },
   {
+    path: "/inventory/bulk-edit",
+    element: (
+      <ProtectedRoute>
+        <BulkEdit />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/items",
     element: (
       <ProtectedRoute>
         <Items />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/locations",
-    element: (
-      <ProtectedRoute>
-        <Locations />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/team",
-    element: (
-      <ProtectedRoute>
-        <Team />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/history",
-    element: (
-      <ProtectedRoute>
-        <History />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/settings",
-    element: (
-      <ProtectedRoute>
-        <Settings />
       </ProtectedRoute>
     ),
   },
@@ -88,4 +65,36 @@ export const routes = [
       </ProtectedRoute>
     ),
   },
-];
+  {
+    path: "/history",
+    element: (
+      <ProtectedRoute>
+        <History />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/locations",
+    element: (
+      <ProtectedRoute>
+        <Locations />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <Settings />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/team",
+    element: (
+      <ProtectedRoute>
+        <Team />
+      </ProtectedRoute>
+    ),
+  },
+]);
