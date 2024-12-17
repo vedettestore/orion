@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { EditInventoryForm } from "./EditInventoryForm";
 import { Json } from "@/integrations/supabase/types";
-import { TableHeader } from "./TableHeader";
+import { InventoryTableHeader } from "./TableHeader";
 import { MainProductRow } from "./MainProductRow";
 import { VariantRow } from "./VariantRow";
 import { LoadingState } from "./LoadingState";
@@ -57,7 +57,7 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     <>
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
         <Table>
-          <TableHeader />
+          <InventoryTableHeader />
           <TableBody>
             {mainProducts.map((item) => (
               <>
