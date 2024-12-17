@@ -10,8 +10,8 @@ export function MobileDrawer() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-6 w-6" />
+        <Button variant="ghost" size="icon" className="md:hidden m-2">
+          <Menu className="h-8 w-8" />
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] bg-black p-0">
@@ -23,7 +23,7 @@ export function MobileDrawer() {
               </h2>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
-                  <X className="h-6 w-6" />
+                  <X className="h-8 w-8" />
                 </Button>
               </SheetTrigger>
             </div>
