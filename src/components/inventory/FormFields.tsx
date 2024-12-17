@@ -14,6 +14,7 @@ interface InventoryFormData {
   status: string;
   "image url": string;
   quantity: number;
+  barcode: string;
 }
 
 interface FormFieldsProps {
@@ -72,6 +73,18 @@ export const FormFields = ({ form }: FormFieldsProps) => {
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 className="focus-visible:ring-primary"
               />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="barcode"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-gray-700">UPC/Barcode</FormLabel>
+            <FormControl>
+              <Input {...field} className="focus-visible:ring-primary" />
             </FormControl>
           </FormItem>
         )}

@@ -20,6 +20,7 @@ interface InventoryItem {
   status?: string;
   "image url"?: string;
   quantity?: number;
+  barcode?: string;
 }
 
 interface InventoryTableProps {
@@ -48,6 +49,7 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
               <TableHead className="font-semibold">Type</TableHead>
               <TableHead className="font-semibold">SKU</TableHead>
               <TableHead className="font-semibold">Quantity</TableHead>
+              <TableHead className="font-semibold">UPC</TableHead>
               <TableHead className="font-semibold">Status</TableHead>
               <TableHead className="w-[100px] font-semibold">Actions</TableHead>
             </TableRow>
@@ -59,6 +61,7 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
                 <TableCell className="text-gray-600">{item.type || "N/A"}</TableCell>
                 <TableCell className="text-gray-600">{item.sku || "N/A"}</TableCell>
                 <TableCell className="text-gray-600">{item.quantity || 0}</TableCell>
+                <TableCell className="text-gray-600">{item.barcode || "N/A"}</TableCell>
                 <StatusBadge status={item.status || ""} />
                 <ActionButtons onEdit={() => setEditingItem(item)} />
               </TableRow>
