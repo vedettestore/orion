@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MobileDrawer } from "./MobileDrawer";
+import { CreateDrawer } from "./CreateDrawer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -57,10 +58,11 @@ export function AppSidebar() {
       <MobileDrawer />
       <Sidebar className="border-r border-gray-800 transition-all duration-500 ease-in-out group/sidebar hover:w-64 w-16 hidden md:flex">
         <SidebarContent>
-          <div className="px-4 py-5 mb-6">
+          <div className="px-4 py-5 mb-6 flex items-center justify-between">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
               W
             </h1>
+            <CreateDrawer />
           </div>
           <SidebarGroup>
             <SidebarGroupContent>

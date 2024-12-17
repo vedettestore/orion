@@ -1,10 +1,11 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, Plus } from "lucide-react";
 import { menuItems } from "./AppSidebar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CreateDrawer } from "./CreateDrawer";
 
 export function MobileDrawer() {
   const location = useLocation();
@@ -33,11 +34,14 @@ export function MobileDrawer() {
               <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 Warehouse
               </h2>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <X className="h-8 w-8" />
-                </Button>
-              </SheetTrigger>
+              <div className="flex items-center gap-2">
+                <CreateDrawer />
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <X className="h-8 w-8" />
+                  </Button>
+                </SheetTrigger>
+              </div>
             </div>
           </div>
           <nav className="flex-1 overflow-y-auto">
