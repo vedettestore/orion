@@ -1,0 +1,23 @@
+export type InventoryRow = {
+  id: number;
+  name: string;
+  type: string | null;
+  tags: string | null;
+  size: string | null;
+  color: string | null;
+  sku: string | null;
+  description: string | null;
+  category: string | null;
+  "inventory tracker": string | null;
+  "inventory policy": string | null;
+  price: number | null;
+  barcode: string | null;
+  "image url": string | null;
+  "variant image url": string | null;
+  status: string | null;
+  parent_id: number | null;
+  is_variant: boolean | null;
+  low_stock_threshold: number | null;
+  warehouse_location: string | null;
+  quantity: number | null;
+};

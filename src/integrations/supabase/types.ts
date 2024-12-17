@@ -24,6 +24,7 @@ export type Database = {
           name: string
           parent_id: number | null
           price: number | null
+          quantity: number | null
           size: string | null
           sku: string | null
           status: string | null
@@ -46,6 +47,7 @@ export type Database = {
           name: string
           parent_id?: number | null
           price?: number | null
+          quantity?: number | null
           size?: string | null
           sku?: string | null
           status?: string | null
@@ -68,6 +70,7 @@ export type Database = {
           name?: string
           parent_id?: number | null
           price?: number | null
+          quantity?: number | null
           size?: string | null
           sku?: string | null
           status?: string | null

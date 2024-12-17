@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { Tables } from "@/integrations/supabase/types";
 
 const Index = () => {
   // Query for inventory items with low stock alert
@@ -17,14 +18,14 @@ const Index = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('inventory')
-        .select('*, low_stock_threshold');
+        .select('*');
       
       if (error) {
         toast.error('Failed to fetch inventory');
         throw error;
       }
       
-      return data;
+      return data as Tables<'inventory'>[];
     },
   });
 
@@ -49,7 +50,7 @@ const Index = () => {
 
   // Calculate metrics
   const lowStockItems = inventoryItems?.filter(
-    item => item.low_stock_threshold && item.quantity <= item.low_stock_threshold
+    item => item.low_stock_threshold && (item.quantity || 0) <= (item.low_stock_threshold || 0)
   ) || [];
 
   const totalValue = inventoryItems?.reduce(
