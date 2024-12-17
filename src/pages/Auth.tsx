@@ -91,15 +91,6 @@ const AuthPage = () => {
                   },
                 },
               }}
-              {...{
-                onError: (error) => {
-                  toast({
-                    variant: "destructive",
-                    title: "Authentication Error",
-                    description: error.message,
-                  });
-                },
-              }}
             />
             <Mail className="absolute text-gray-400 left-3 top-[59px] h-5 w-5 pointer-events-none" />
             <Lock className="absolute text-gray-400 left-3 top-[127px] h-5 w-5 pointer-events-none" />
