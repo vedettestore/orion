@@ -28,26 +28,29 @@ export function CreateDrawer() {
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-gray-400 hover:text-primary"
+          className="group flex items-center px-4 py-3 w-full transition-all duration-500 ease-in-out rounded-lg hover:bg-gray-800 text-gray-400 hover:text-primary"
         >
-          <Plus className="h-5 w-5" />
-          <span className="sr-only">Create new</span>
+          <div className="flex items-center gap-3">
+            <Plus className="h-5 w-5 transition-transform duration-500 ease-in-out group-hover:text-primary" />
+            <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-500 ease-in-out whitespace-nowrap">
+              Create New
+            </span>
+          </div>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] bg-black p-0">
-        <SheetHeader className="p-4 border-b border-gray-800">
-          <SheetTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+      <SheetContent side="left" className="w-[240px] bg-white">
+        <SheetHeader className="p-4 border-b">
+          <SheetTitle className="text-lg font-semibold text-gray-900">
             Create New
           </SheetTitle>
         </SheetHeader>
-        <nav className="p-4">
-          <ul className="space-y-2">
+        <nav className="p-2">
+          <ul className="space-y-1">
             {createOptions.map((option) => (
               <li key={option.title}>
                 <Link
                   to={option.path}
-                  className="flex items-center px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-primary transition-colors"
+                  className="flex items-center px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
                 >
                   {option.title}
                 </Link>

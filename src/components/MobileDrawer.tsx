@@ -1,6 +1,6 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, Plus } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { menuItems } from "./AppSidebar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,18 +34,18 @@ export function MobileDrawer() {
               <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 Warehouse
               </h2>
-              <div className="flex items-center gap-2">
-                <CreateDrawer />
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <X className="h-8 w-8" />
-                  </Button>
-                </SheetTrigger>
-              </div>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <X className="h-8 w-8" />
+                </Button>
+              </SheetTrigger>
             </div>
           </div>
           <nav className="flex-1 overflow-y-auto">
             <ul className="p-4 space-y-2">
+              <li>
+                <CreateDrawer />
+              </li>
               {menuItems.map((item) => (
                 <li key={item.title}>
                   <Link
