@@ -7,7 +7,6 @@ import Locations from "./pages/Locations";
 import Team from "./pages/Team";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
-import PackingLists from "./pages/PackingLists";
 import PickPack from "./pages/PickPack";
 import Purchasing from "./pages/Purchasing";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -70,14 +69,6 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <Settings />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/packing-lists",
-    element: (
-      <ProtectedRoute>
-        <PackingLists />
       </ProtectedRoute>
     ),
   },

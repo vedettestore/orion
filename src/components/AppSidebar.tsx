@@ -17,7 +17,6 @@ import {
   History, 
   Settings2,
   ChevronRight,
-  List,
   ShoppingCart,
   PackageCheck
 } from "lucide-react";
@@ -30,7 +29,6 @@ export const menuItems = [
   { title: "Items", icon: BoxesIcon, url: "/items" },
   { title: "Locations", icon: Building2, url: "/locations" },
   { title: "Team", icon: Users2, url: "/team" },
-  { title: "Packing Lists", icon: List, url: "/packing-lists" },
   { title: "Pick & Pack", icon: PackageCheck, url: "/pick-pack" },
   { title: "Purchasing", icon: ShoppingCart, url: "/purchasing" },
   { title: "History", icon: History, url: "/history" },
