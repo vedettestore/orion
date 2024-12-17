@@ -29,14 +29,14 @@ const Index = () => {
     },
   });
 
-  // Query for recent purchase orders
+  // Query for recent purchase orders - Fixed the ordering column from created_at to date_ordered
   const { data: recentOrders } = useQuery({
     queryKey: ['recent-orders'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('purchase_orders')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('date_ordered', { ascending: false })
         .limit(5);
       
       if (error) {
