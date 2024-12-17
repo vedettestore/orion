@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { FormFields } from "./FormFields";
+import { VariantForm } from "./VariantForm";
+import { useState } from "react";
 
 interface InventoryItem {
   id: number;
@@ -22,6 +24,9 @@ interface InventoryItem {
   "image url"?: string;
   quantity?: number;
   barcode?: string;
+  is_variant?: boolean;
+  parent_id?: number | null;
+  variant_attributes?: Record<string, any>;
 }
 
 interface EditInventoryFormProps {
@@ -35,6 +40,7 @@ export const EditInventoryForm = ({
   open,
   onOpenChange,
 }: EditInventoryFormProps) => {
+  const [showVariantForm, setShowVariantForm] = useState(false);
   const form = useForm({
     defaultValues: {
       name: item.name,
@@ -69,6 +75,31 @@ export const EditInventoryForm = ({
     },
   });
 
+  const { mutate: addVariant } = useMutation({
+    mutationFn: async (variantData: { sku: string; attributes: Record<string, string> }) => {
+      const { error } = await supabase
+        .from("inventory")
+        .insert({
+          name: `${item.name} - Variant`,
+          sku: variantData.sku,
+          parent_id: item.id,
+          is_variant: true,
+          variant_attributes: variantData.attributes,
+        });
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inventory"] });
+      toast.success("Variant added successfully");
+      setShowVariantForm(false);
+    },
+    onError: (error) => {
+      toast.error("Failed to add variant");
+      console.error("Error adding variant:", error);
+    },
+  });
+
   const onSubmit = (values: Partial<Omit<InventoryItem, "id">>) => {
     updateItem(values);
   };
@@ -94,6 +125,22 @@ export const EditInventoryForm = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormFields form={form} />
+            {!item.is_variant && (
+              <div className="pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowVariantForm(!showVariantForm)}
+                >
+                  {showVariantForm ? "Hide Variant Form" : "Add Variant"}
+                </Button>
+                {showVariantForm && (
+                  <div className="mt-4">
+                    <VariantForm onAddVariant={addVariant} />
+                  </div>
+                )}
+              </div>
+            )}
             <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"

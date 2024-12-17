@@ -31,6 +31,7 @@ export type Database = {
           tags: string | null
           type: string | null
           "variant image url": string | null
+          variant_attributes: Json | null
           warehouse_location: string | null
         }
         Insert: {
@@ -54,6 +55,7 @@ export type Database = {
           tags?: string | null
           type?: string | null
           "variant image url"?: string | null
+          variant_attributes?: Json | null
           warehouse_location?: string | null
         }
         Update: {
@@ -77,6 +79,7 @@ export type Database = {
           tags?: string | null
           type?: string | null
           "variant image url"?: string | null
+          variant_attributes?: Json | null
           warehouse_location?: string | null
         }
         Relationships: [
