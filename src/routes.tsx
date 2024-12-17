@@ -12,7 +12,7 @@ import Settings from "@/pages/Settings";
 import Team from "@/pages/Team";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-export const router = createBrowserRouter([
+export const routes = [
   {
     path: "/",
     element: (
@@ -97,4 +97,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);
