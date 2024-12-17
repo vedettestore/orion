@@ -18,13 +18,20 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           return;
         }
 
-        // If no session, try to refresh
         if (!session) {
+          setIsAuthenticated(false);
+          return;
+        }
+
+        // Only try to refresh if we had a valid session
+        if (session.expires_at && session.expires_at <= Math.floor(Date.now() / 1000)) {
           const { data: { session: refreshedSession }, error: refreshError } = 
             await supabase.auth.refreshSession();
           
           if (refreshError) {
             console.error('Session refresh error:', refreshError);
+            // If refresh fails, sign out the user
+            await supabase.auth.signOut();
             setIsAuthenticated(false);
             return;
           }
