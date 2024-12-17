@@ -30,8 +30,8 @@ const validateAndTransformInventoryData = (data: unknown): InventoryInsert | nul
     "image url": typeof record["image url"] === 'string' ? record["image url"] : null,
     "variant image url": typeof record["variant image url"] === 'string' ? record["variant image url"] : null,
     status: typeof record.status === 'string' ? record.status : null,
-    upc_code: typeof record.upc_code === 'string' ? record.upc_code : null,
-    quantity: typeof record.quantity === 'number' ? record.quantity : 0,
+    is_variant: typeof record.is_variant === 'boolean' ? record.is_variant : false,
+    parent_id: typeof record.parent_id === 'number' ? record.parent_id : null,
   };
 
   return inventory;
