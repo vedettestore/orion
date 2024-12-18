@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InventoryHeader } from "@/components/inventory/InventoryHeader";
@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const queryClient = useQueryClient();
 
   // Add mutation for deleting Alyssa Full Body Suit products
   const { mutate: deleteAlyssaProducts } = useMutation({
