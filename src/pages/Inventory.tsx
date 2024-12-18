@@ -5,7 +5,7 @@ import { InventoryHeader } from "@/components/inventory/InventoryHeader";
 import { InventoryTable } from "@/components/inventory/InventoryTable";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +13,24 @@ const Inventory = () => {
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
+      // First, ensure the parent product exists
+      const { error: insertError } = await supabase
+        .from("staging_shopify_inventory")
+        .upsert({
+          title: "Alyssa Full Body Suit",
+          variant_sku: "117-PARENT",
+          type: "Apparel",
+          status: "active",
+        }, {
+          onConflict: "variant_sku"
+        });
+
+      if (insertError) {
+        toast.error("Failed to ensure parent product exists");
+        throw insertError;
+      }
+
+      // Then fetch all inventory items
       const { data, error } = await supabase
         .from("staging_shopify_inventory")
         .select("*");
@@ -20,6 +38,27 @@ const Inventory = () => {
       if (error) {
         toast.error("Failed to fetch inventory");
         throw error;
+      }
+
+      // Update variants to reference the parent
+      const variants = data.filter(item => 
+        item.variant_sku?.startsWith("117") && 
+        item.variant_sku !== "117-PARENT"
+      );
+
+      if (variants.length > 0) {
+        const { error: updateError } = await supabase
+          .from("staging_shopify_inventory")
+          .update({ 
+            option1_name: "Size",
+            option1_value: (row: any) => row.title.split(" - ")[1] || "Default"
+          })
+          .in("variant_sku", variants.map(v => v.variant_sku));
+
+        if (updateError) {
+          toast.error("Failed to update variants");
+          throw updateError;
+        }
       }
 
       return data;

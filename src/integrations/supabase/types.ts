@@ -28,15 +28,7 @@ export type Database = {
           product_id?: number | null
           variant_image?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "images_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       packing_list_items: {
         Row: {
@@ -536,15 +528,7 @@ export type Database = {
           product_id?: number | null
           tag?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "tags_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       tags_staging: {
         Row: {
@@ -622,15 +606,7 @@ export type Database = {
           weight?: number | null
           weight_unit?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "variants_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
