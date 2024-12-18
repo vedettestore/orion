@@ -45,7 +45,6 @@ export const VariantRow = ({ variant, onEdit }: VariantRowProps) => {
           {renderVariantAttributes(variant)}
         </div>
       </TableCell>
-      <TableCell className="text-gray-600">{variant.type || "N/A"}</TableCell>
       <TableCell className="text-gray-600">{variant.variant_sku || "N/A"}</TableCell>
       <TableCell className="text-gray-600">{variant.variant_grams || 0}</TableCell>
       <TableCell className="text-gray-600">{variant.variant_barcode || "N/A"}</TableCell>
