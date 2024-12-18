@@ -16,7 +16,9 @@ const BulkEdit = () => {
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("inventory").select("*");
+      const { data, error } = await supabase
+        .from("staging_shopify_inventory")
+        .select("*");
       if (error) {
         toast.error("Failed to fetch inventory");
         throw error;
@@ -29,7 +31,7 @@ const BulkEdit = () => {
     try {
       for (const [id, changes] of Object.entries(editedData)) {
         const { error } = await supabase
-          .from("inventory")
+          .from("staging_shopify_inventory")
           .update(changes)
           .eq("id", id);
         

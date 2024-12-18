@@ -8,7 +8,9 @@ const Items = () => {
   const { data: items, isLoading } = useQuery({
     queryKey: ["items"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("inventory").select("*");
+      const { data, error } = await supabase
+        .from("staging_shopify_inventory")
+        .select("*");
       if (error) {
         toast.error("Failed to fetch items");
         throw error;

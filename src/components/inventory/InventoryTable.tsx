@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { EditInventoryForm } from "./EditInventoryForm";
-import { Json } from "@/integrations/supabase/types";
 import { InventoryTableHeader } from "./TableHeader";
 import { MainProductRow } from "./MainProductRow";
 import { VariantRow } from "./VariantRow";
 import { LoadingState } from "./LoadingState";
 
 interface InventoryItem {
-  id: number;
-  name: string;
+  id?: number;
+  title: string;
   type?: string;
-  sku?: string;
+  variant_sku?: string;
   status?: string;
-  "image url"?: string;
-  quantity?: number;
-  barcode?: string;
-  is_variant?: boolean;
-  parent_id?: number | null;
-  variant_attributes?: Json;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
 }
 
 interface InventoryTableProps {
@@ -38,18 +38,17 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     );
   };
 
-  const mainProducts = data.filter(item => !item.parent_id);
+  const mainProducts = data.filter(item => !item.option1_name);
   const variantsByParent = data.reduce((acc, item) => {
-    if (item.parent_id) {
-      if (!acc[item.parent_id]) {
-        acc[item.parent_id] = [];
+    if (item.option1_name) {
+      const parentId = item.id;
+      if (!acc[parentId!]) {
+        acc[parentId!] = [];
       }
-      acc[item.parent_id].push(item);
+      acc[parentId!].push(item);
     }
     return acc;
   }, {} as Record<number, InventoryItem[]>);
-
-  console.log('Number of main products:', mainProducts.length);
 
   if (isLoading) {
     return <LoadingState />;
@@ -65,13 +64,13 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
               <React.Fragment key={item.id}>
                 <MainProductRow
                   item={item}
-                  hasVariants={!!variantsByParent[item.id]?.length}
-                  isExpanded={expandedItems.includes(item.id)}
-                  onToggleExpand={() => toggleExpand(item.id)}
+                  hasVariants={!!variantsByParent[item.id!]?.length}
+                  isExpanded={expandedItems.includes(item.id!)}
+                  onToggleExpand={() => toggleExpand(item.id!)}
                   onEdit={setEditingItem}
                 />
-                {expandedItems.includes(item.id) &&
-                  variantsByParent[item.id]?.map((variant) => (
+                {expandedItems.includes(item.id!) &&
+                  variantsByParent[item.id!]?.map((variant) => (
                     <VariantRow
                       key={variant.id}
                       variant={variant}

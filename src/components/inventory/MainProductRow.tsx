@@ -7,14 +7,14 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface MainProductRowProps {
   item: {
-    id: number;
-    name: string;
+    id?: number;
+    title: string;
     type?: string;
-    sku?: string;
+    variant_sku?: string;
     status?: string;
-    "image url"?: string;
-    quantity?: number;
-    barcode?: string;
+    image_src?: string;
+    variant_grams?: number;
+    variant_barcode?: string;
   };
   hasVariants: boolean;
   isExpanded: boolean;
@@ -47,11 +47,11 @@ export const MainProductRow = ({
           </Button>
         )}
       </TableCell>
-      <ProductCell name={item.name} imageUrl={item["image url"]} />
+      <ProductCell name={item.title} imageUrl={item.image_src} />
       <TableCell className="text-gray-600">{item.type || "N/A"}</TableCell>
-      <TableCell className="text-gray-600">{item.sku || "N/A"}</TableCell>
-      <TableCell className="text-gray-600">{item.quantity || 0}</TableCell>
-      <TableCell className="text-gray-600">{item.barcode || "N/A"}</TableCell>
+      <TableCell className="text-gray-600">{item.variant_sku || "N/A"}</TableCell>
+      <TableCell className="text-gray-600">{item.variant_grams || 0}</TableCell>
+      <TableCell className="text-gray-600">{item.variant_barcode || "N/A"}</TableCell>
       <StatusBadge status={item.status || ""} />
       <ActionButtons onEdit={() => onEdit(item)} />
     </TableRow>

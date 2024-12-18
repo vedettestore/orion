@@ -17,7 +17,7 @@ const Index = () => {
     queryKey: ['inventory'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('inventory')
+        .from('staging_shopify_inventory')
         .select('*');
       
       if (error) {
@@ -25,11 +25,11 @@ const Index = () => {
         throw error;
       }
       
-      return data as Tables<'inventory'>[];
+      return data;
     },
   });
 
-  // Query for recent purchase orders - Fixed the ordering column from created_at to date_ordered
+  // Query for recent purchase orders
   const { data: recentOrders } = useQuery({
     queryKey: ['recent-orders'],
     queryFn: async () => {
@@ -50,11 +50,11 @@ const Index = () => {
 
   // Calculate metrics
   const lowStockItems = inventoryItems?.filter(
-    item => item.low_stock_threshold && (item.quantity || 0) <= (item.low_stock_threshold || 0)
+    item => item.variant_grams && item.variant_grams < 100
   ) || [];
 
   const totalValue = inventoryItems?.reduce(
-    (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
+    (sum, item) => sum + (item.variant_price || 0),
     0
   ) || 0;
 
