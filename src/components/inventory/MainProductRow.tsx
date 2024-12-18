@@ -53,6 +53,7 @@ export const MainProductRow = ({
         )}
       </TableCell>
       <ProductCell name={item.title} imageUrl={item.image_src} />
+      <TableCell className="text-gray-600">{item.title || "N/A"}</TableCell>
       <TableCell className="text-gray-600">{item.type || "N/A"}</TableCell>
       <TableCell className="text-gray-600">{item.variant_sku || "N/A"}</TableCell>
       <TableCell className="text-gray-600">{item.variant_grams || 0}</TableCell>
