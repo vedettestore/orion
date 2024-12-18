@@ -14,11 +14,17 @@ const Inventory = () => {
     queryKey: ["inventory"],
     queryFn: async () => {
       // First, check if parent product exists
-      const { data: existingParent } = await supabase
+      const { data: existingParent, error: parentError } = await supabase
         .from("staging_shopify_inventory")
         .select("*")
         .eq("variant_sku", "117-PARENT")
-        .single();
+        .maybeSingle();
+
+      if (parentError) {
+        console.error("Error checking for parent product:", parentError);
+        toast.error("Failed to check for parent product");
+        throw parentError;
+      }
 
       // If parent doesn't exist, create it
       if (!existingParent) {
