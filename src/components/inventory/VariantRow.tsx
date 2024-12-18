@@ -1,7 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "./StatusBadge";
 import { ActionButtons } from "./ActionButtons";
-import { Json } from "@/integrations/supabase/types";
 
 interface InventoryItem {
   title: string;
@@ -51,7 +50,7 @@ export const VariantRow = ({ variant, onEdit }: VariantRowProps) => {
       <TableCell className="text-gray-600">{variant.variant_grams || 0}</TableCell>
       <TableCell className="text-gray-600">{variant.variant_barcode || "N/A"}</TableCell>
       <StatusBadge status={variant.status || ""} />
-      <ActionButtons onEdit={() => onEdit(variant)} />
+      <ActionButtons item={variant} onEdit={() => onEdit(variant)} />
     </TableRow>
   );
 };
