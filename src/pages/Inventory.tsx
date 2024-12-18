@@ -20,6 +20,9 @@ const Inventory = () => {
         throw error;
       }
 
+      const mainProducts = data.filter(item => !item.parent_id);
+      console.log('Number of main products:', mainProducts.length);
+      
       return data;
     },
   });
