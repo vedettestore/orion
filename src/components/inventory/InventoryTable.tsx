@@ -60,9 +60,8 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
           <InventoryTableHeader />
           <TableBody>
             {mainProducts.map((item) => (
-              <>
+              <React.Fragment key={item.id}>
                 <MainProductRow
-                  key={item.id}
                   item={item}
                   hasVariants={!!variantsByParent[item.id]?.length}
                   isExpanded={expandedItems.includes(item.id)}
@@ -77,7 +76,7 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
                       onEdit={setEditingItem}
                     />
                   ))}
-              </>
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>
