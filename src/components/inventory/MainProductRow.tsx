@@ -5,21 +5,26 @@ import { ActionButtons } from "./ActionButtons";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
+interface InventoryItem {
+  title: string;
+  type?: string;
+  variant_sku?: string;
+  status?: string;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
+}
+
 interface MainProductRowProps {
-  item: {
-    id?: number;
-    title: string;
-    type?: string;
-    variant_sku?: string;
-    status?: string;
-    image_src?: string;
-    variant_grams?: number;
-    variant_barcode?: string;
-  };
+  item: InventoryItem;
   hasVariants: boolean;
   isExpanded: boolean;
   onToggleExpand: () => void;
-  onEdit: (item: any) => void;
+  onEdit: (item: InventoryItem) => void;
 }
 
 export const MainProductRow = ({

@@ -5,23 +5,26 @@ import { ProductCell } from "./ProductCell";
 import { StatusBadge } from "./StatusBadge";
 
 interface InventoryItem {
-  id: number;
-  name: string;
+  title: string;
   type?: string;
-  sku?: string;
+  variant_sku?: string;
   status?: string;
-  "image url"?: string;
-  quantity?: number;
-  barcode?: string;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
 }
 
 interface BulkEditTableProps {
   data: InventoryItem[];
   isLoading: boolean;
-  selectedItems: number[];
-  setSelectedItems: (items: number[]) => void;
-  editedData: Record<number, Record<string, any>>;
-  setEditedData: (data: Record<number, Record<string, any>>) => void;
+  selectedItems: string[];
+  setSelectedItems: (items: string[]) => void;
+  editedData: Record<string, Record<string, any>>;
+  setEditedData: (data: Record<string, Record<string, any>>) => void;
 }
 
 export const BulkEditTable = ({
@@ -36,23 +39,23 @@ export const BulkEditTable = ({
     if (selectedItems.length === data.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(data.map((item) => item.id));
+      setSelectedItems(data.map((item) => item.variant_sku!));
     }
   };
 
-  const handleSelectItem = (id: number) => {
-    if (selectedItems.includes(id)) {
-      setSelectedItems(selectedItems.filter((item) => item !== id));
+  const handleSelectItem = (sku: string) => {
+    if (selectedItems.includes(sku)) {
+      setSelectedItems(selectedItems.filter((item) => item !== sku));
     } else {
-      setSelectedItems([...selectedItems, id]);
+      setSelectedItems([...selectedItems, sku]);
     }
   };
 
-  const handleEdit = (id: number, field: string, value: any) => {
+  const handleEdit = (sku: string, field: string, value: any) => {
     setEditedData({
       ...editedData,
-      [id]: {
-        ...(editedData[id] || {}),
+      [sku]: {
+        ...(editedData[sku] || {}),
         [field]: value,
       },
     });
@@ -88,99 +91,99 @@ export const BulkEditTable = ({
         <TableBody>
           {data.map((item) => (
             <TableRow
-              key={item.id}
+              key={item.variant_sku}
               className={`hover:bg-gray-50/50 ${
-                selectedItems.includes(item.id) ? "bg-primary/5" : ""
+                selectedItems.includes(item.variant_sku!) ? "bg-primary/5" : ""
               }`}
             >
               <TableCell>
                 <Checkbox
-                  checked={selectedItems.includes(item.id)}
-                  onCheckedChange={() => handleSelectItem(item.id)}
+                  checked={selectedItems.includes(item.variant_sku!)}
+                  onCheckedChange={() => handleSelectItem(item.variant_sku!)}
                 />
               </TableCell>
-              <ProductCell name={item.name} imageUrl={item["image url"]} />
+              <ProductCell name={item.title} imageUrl={item.image_src} />
               <TableCell>
                 <Input
                   value={
-                    editedData[item.id]?.type !== undefined
-                      ? editedData[item.id].type
+                    editedData[item.variant_sku!]?.type !== undefined
+                      ? editedData[item.variant_sku!].type
                       : item.type || ""
                   }
-                  onChange={(e) => handleEdit(item.id, "type", e.target.value)}
+                  onChange={(e) => handleEdit(item.variant_sku!, "type", e.target.value)}
                   className={`w-full ${
-                    selectedItems.includes(item.id)
+                    selectedItems.includes(item.variant_sku!)
                       ? "bg-white"
                       : "bg-transparent border-transparent"
                   }`}
-                  disabled={!selectedItems.includes(item.id)}
+                  disabled={!selectedItems.includes(item.variant_sku!)}
                 />
               </TableCell>
               <TableCell>
                 <Input
                   value={
-                    editedData[item.id]?.sku !== undefined
-                      ? editedData[item.id].sku
-                      : item.sku || ""
+                    editedData[item.variant_sku!]?.variant_sku !== undefined
+                      ? editedData[item.variant_sku!].variant_sku
+                      : item.variant_sku || ""
                   }
-                  onChange={(e) => handleEdit(item.id, "sku", e.target.value)}
+                  onChange={(e) => handleEdit(item.variant_sku!, "variant_sku", e.target.value)}
                   className={`w-full ${
-                    selectedItems.includes(item.id)
+                    selectedItems.includes(item.variant_sku!)
                       ? "bg-white"
                       : "bg-transparent border-transparent"
                   }`}
-                  disabled={!selectedItems.includes(item.id)}
+                  disabled={!selectedItems.includes(item.variant_sku!)}
                 />
               </TableCell>
               <TableCell>
                 <Input
                   type="number"
                   value={
-                    editedData[item.id]?.quantity !== undefined
-                      ? editedData[item.id].quantity
-                      : item.quantity || 0
+                    editedData[item.variant_sku!]?.variant_grams !== undefined
+                      ? editedData[item.variant_sku!].variant_grams
+                      : item.variant_grams || 0
                   }
                   onChange={(e) =>
-                    handleEdit(item.id, "quantity", parseInt(e.target.value))
+                    handleEdit(item.variant_sku!, "variant_grams", parseInt(e.target.value))
                   }
                   className={`w-full ${
-                    selectedItems.includes(item.id)
+                    selectedItems.includes(item.variant_sku!)
                       ? "bg-white"
                       : "bg-transparent border-transparent"
                   }`}
-                  disabled={!selectedItems.includes(item.id)}
+                  disabled={!selectedItems.includes(item.variant_sku!)}
                 />
               </TableCell>
               <TableCell>
                 <Input
                   value={
-                    editedData[item.id]?.barcode !== undefined
-                      ? editedData[item.id].barcode
-                      : item.barcode || ""
+                    editedData[item.variant_sku!]?.variant_barcode !== undefined
+                      ? editedData[item.variant_sku!].variant_barcode
+                      : item.variant_barcode || ""
                   }
-                  onChange={(e) => handleEdit(item.id, "barcode", e.target.value)}
+                  onChange={(e) => handleEdit(item.variant_sku!, "variant_barcode", e.target.value)}
                   className={`w-full ${
-                    selectedItems.includes(item.id)
+                    selectedItems.includes(item.variant_sku!)
                       ? "bg-white"
                       : "bg-transparent border-transparent"
                   }`}
-                  disabled={!selectedItems.includes(item.id)}
+                  disabled={!selectedItems.includes(item.variant_sku!)}
                 />
               </TableCell>
               <TableCell>
                 <Input
                   value={
-                    editedData[item.id]?.status !== undefined
-                      ? editedData[item.id].status
+                    editedData[item.variant_sku!]?.status !== undefined
+                      ? editedData[item.variant_sku!].status
                       : item.status || ""
                   }
-                  onChange={(e) => handleEdit(item.id, "status", e.target.value)}
+                  onChange={(e) => handleEdit(item.variant_sku!, "status", e.target.value)}
                   className={`w-full ${
-                    selectedItems.includes(item.id)
+                    selectedItems.includes(item.variant_sku!)
                       ? "bg-white"
                       : "bg-transparent border-transparent"
                   }`}
-                  disabled={!selectedItems.includes(item.id)}
+                  disabled={!selectedItems.includes(item.variant_sku!)}
                 />
               </TableCell>
             </TableRow>

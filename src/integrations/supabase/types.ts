@@ -546,6 +546,21 @@ export type Database = {
           },
         ]
       }
+      tags_staging: {
+        Row: {
+          product_id: number | null
+          tag: string | null
+        }
+        Insert: {
+          product_id?: number | null
+          tag?: string | null
+        }
+        Update: {
+          product_id?: number | null
+          tag?: string | null
+        }
+        Relationships: []
+      }
       variants: {
         Row: {
           barcode: string | null
