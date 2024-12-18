@@ -59,7 +59,7 @@ export const MainProductRow = ({
       <TableCell className="text-gray-600">{item.variant_grams || 0}</TableCell>
       <TableCell className="text-gray-600">{item.variant_barcode || "N/A"}</TableCell>
       <StatusBadge status={item.status || ""} />
-      <ActionButtons onEdit={() => onEdit(item)} />
+      <ActionButtons onEdit={() => onEdit(item)} item={item} />
     </TableRow>
   );
 };
