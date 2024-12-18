@@ -5,11 +5,11 @@ import { Label } from "@/components/ui/label";
 import { Plus, X } from "lucide-react";
 
 interface VariantFormProps {
-  onAddVariant: (variant: { sku: string; attributes: Record<string, string> }) => void;
+  onAddVariant: (variant: { variant_sku: string; attributes: Record<string, string> }) => void;
 }
 
 export const VariantForm = ({ onAddVariant }: VariantFormProps) => {
-  const [sku, setSku] = useState("");
+  const [variant_sku, setSku] = useState("");
   const [attributes, setAttributes] = useState<{ key: string; value: string }[]>([
     { key: "", value: "" },
   ]);
@@ -41,7 +41,7 @@ export const VariantForm = ({ onAddVariant }: VariantFormProps) => {
       }),
       {}
     );
-    onAddVariant({ sku, attributes: variantAttributes });
+    onAddVariant({ variant_sku, attributes: variantAttributes });
     setSku("");
     setAttributes([{ key: "", value: "" }]);
   };
@@ -52,7 +52,7 @@ export const VariantForm = ({ onAddVariant }: VariantFormProps) => {
         <Label htmlFor="sku">SKU</Label>
         <Input
           id="sku"
-          value={sku}
+          value={variant_sku}
           onChange={(e) => setSku(e.target.value)}
           placeholder="Enter variant SKU"
           required

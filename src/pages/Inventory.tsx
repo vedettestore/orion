@@ -22,15 +22,13 @@ const Inventory = () => {
         throw error;
       }
 
-      const mainProducts = data.filter(item => !item.option1_name);
-      console.log('Number of main products:', mainProducts.length);
-      
       return data;
     },
   });
 
   const filteredItems = inventoryItems?.filter(item => 
-    item.variant_sku?.toLowerCase().includes(searchTerm.toLowerCase())
+    item.variant_sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.title?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
   return (

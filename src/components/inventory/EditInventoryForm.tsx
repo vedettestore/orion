@@ -14,7 +14,6 @@ import { X } from "lucide-react";
 import { FormFields } from "./FormFields";
 import { VariantForm } from "./VariantForm";
 import { useState } from "react";
-import { Json } from "@/integrations/supabase/types";
 
 interface InventoryItem {
   title: string;

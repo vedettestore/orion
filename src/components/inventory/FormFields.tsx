@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
 interface InventoryFormData {
-  name: string;
+  title: string;
   type: string;
-  sku: string;
+  variant_sku: string;
   status: string;
-  "image url": string;
-  quantity: number;
-  barcode: string;
+  image_src: string;
+  variant_grams: number;
+  variant_barcode: string;
 }
 
 interface FormFieldsProps {
@@ -26,10 +26,10 @@ export const FormFields = ({ form }: FormFieldsProps) => {
     <>
       <FormField
         control={form.control}
-        name="name"
+        name="title"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-gray-700">Name</FormLabel>
+            <FormLabel className="text-gray-700">Title</FormLabel>
             <FormControl>
               <Input {...field} className="focus-visible:ring-primary" />
             </FormControl>
@@ -50,7 +50,7 @@ export const FormFields = ({ form }: FormFieldsProps) => {
       />
       <FormField
         control={form.control}
-        name="sku"
+        name="variant_sku"
         render={({ field }) => (
           <FormItem>
             <FormLabel className="text-gray-700">SKU</FormLabel>
@@ -62,10 +62,10 @@ export const FormFields = ({ form }: FormFieldsProps) => {
       />
       <FormField
         control={form.control}
-        name="quantity"
+        name="variant_grams"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-gray-700">Quantity</FormLabel>
+            <FormLabel className="text-gray-700">Weight (grams)</FormLabel>
             <FormControl>
               <Input
                 type="number"
@@ -79,7 +79,7 @@ export const FormFields = ({ form }: FormFieldsProps) => {
       />
       <FormField
         control={form.control}
-        name="barcode"
+        name="variant_barcode"
         render={({ field }) => (
           <FormItem>
             <FormLabel className="text-gray-700">UPC/Barcode</FormLabel>
@@ -103,7 +103,7 @@ export const FormFields = ({ form }: FormFieldsProps) => {
       />
       <FormField
         control={form.control}
-        name="image url"
+        name="image_src"
         render={({ field }) => (
           <FormItem>
             <FormLabel className="text-gray-700">Image URL</FormLabel>
