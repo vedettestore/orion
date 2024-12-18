@@ -5,7 +5,7 @@ import { InventoryHeader } from "@/components/inventory/InventoryHeader";
 import { InventoryTable } from "@/components/inventory/InventoryTable";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,22 +13,31 @@ const Inventory = () => {
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
-      // First, ensure the parent product exists
-      const { error: insertError } = await supabase
+      // First, check if parent product exists
+      const { data: existingParent } = await supabase
         .from("staging_shopify_inventory")
-        .upsert({
-          title: "Alyssa Full Body Suit",
-          variant_sku: "117-PARENT",
-          type: "Apparel",
-          status: "active",
-        });
+        .select("*")
+        .eq("variant_sku", "117-PARENT")
+        .single();
 
-      if (insertError) {
-        toast.error("Failed to ensure parent product exists");
-        throw insertError;
+      // If parent doesn't exist, create it
+      if (!existingParent) {
+        const { error: insertError } = await supabase
+          .from("staging_shopify_inventory")
+          .insert({
+            title: "Alyssa Full Body Suit",
+            variant_sku: "117-PARENT",
+            type: "Apparel",
+            status: "active",
+          });
+
+        if (insertError) {
+          console.error("Failed to create parent product:", insertError);
+          toast.error("Failed to create parent product");
+        }
       }
 
-      // Then fetch all inventory items
+      // Fetch all inventory items
       const { data, error } = await supabase
         .from("staging_shopify_inventory")
         .select("*");
@@ -44,7 +53,7 @@ const Inventory = () => {
         item.variant_sku !== "117-PARENT"
       );
 
-      // Update each variant individually to properly handle the title splitting
+      // Update each variant individually
       for (const variant of variants) {
         const sizeValue = variant.title.split(" - ")[1] || "Default";
         const { error: updateError } = await supabase
@@ -56,12 +65,11 @@ const Inventory = () => {
           .eq("variant_sku", variant.variant_sku);
 
         if (updateError) {
-          toast.error(`Failed to update variant ${variant.variant_sku}`);
-          console.error("Update error:", updateError);
+          console.error(`Failed to update variant ${variant.variant_sku}:`, updateError);
         }
       }
 
-      // Fetch the updated data
+      // Fetch the final updated data
       const { data: updatedData, error: refetchError } = await supabase
         .from("staging_shopify_inventory")
         .select("*");
