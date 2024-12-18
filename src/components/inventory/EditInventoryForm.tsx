@@ -17,17 +17,17 @@ import { useState } from "react";
 import { Json } from "@/integrations/supabase/types";
 
 interface InventoryItem {
-  id: number;
-  name: string;
+  title: string;
   type?: string;
-  sku?: string;
+  variant_sku?: string;
   status?: string;
-  "image url"?: string;
-  quantity?: number;
-  barcode?: string;
-  is_variant?: boolean;
-  parent_id?: number | null;
-  variant_attributes?: Json;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
 }
 
 interface EditInventoryFormProps {
@@ -44,24 +44,24 @@ export const EditInventoryForm = ({
   const [showVariantForm, setShowVariantForm] = useState(false);
   const form = useForm({
     defaultValues: {
-      name: item.name,
+      title: item.title,
       type: item.type || "",
-      sku: item.sku || "",
+      variant_sku: item.variant_sku || "",
       status: item.status || "",
-      "image url": item["image url"] || "",
-      quantity: item.quantity || 0,
-      barcode: item.barcode || "",
+      image_src: item.image_src || "",
+      variant_grams: item.variant_grams || 0,
+      variant_barcode: item.variant_barcode || "",
     },
   });
 
   const queryClient = useQueryClient();
 
   const { mutate: updateItem, isPending } = useMutation({
-    mutationFn: async (values: Partial<Omit<InventoryItem, "id">>) => {
+    mutationFn: async (values: Partial<InventoryItem>) => {
       const { error } = await supabase
-        .from("inventory")
+        .from("staging_shopify_inventory")
         .update(values)
-        .eq("id", item.id);
+        .eq("variant_sku", item.variant_sku);
 
       if (error) throw error;
     },
@@ -77,15 +77,14 @@ export const EditInventoryForm = ({
   });
 
   const { mutate: addVariant } = useMutation({
-    mutationFn: async (variantData: { sku: string; attributes: Record<string, string> }) => {
+    mutationFn: async (variantData: { variant_sku: string; attributes: Record<string, string> }) => {
       const { error } = await supabase
-        .from("inventory")
+        .from("staging_shopify_inventory")
         .insert({
-          name: `${item.name} - Variant`,
-          sku: variantData.sku,
-          parent_id: item.id,
-          is_variant: true,
-          variant_attributes: variantData.attributes,
+          title: `${item.title} - Variant`,
+          variant_sku: variantData.variant_sku,
+          option1_name: Object.keys(variantData.attributes)[0],
+          option1_value: Object.values(variantData.attributes)[0],
         });
 
       if (error) throw error;
@@ -101,7 +100,7 @@ export const EditInventoryForm = ({
     },
   });
 
-  const onSubmit = (values: Partial<Omit<InventoryItem, "id">>) => {
+  const onSubmit = (values: Partial<InventoryItem>) => {
     updateItem(values);
   };
 
@@ -126,7 +125,7 @@ export const EditInventoryForm = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormFields form={form} />
-            {!item.is_variant && (
+            {!item.option1_name && (
               <div className="pt-4">
                 <Button
                   type="button"

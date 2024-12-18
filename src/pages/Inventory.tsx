@@ -13,14 +13,16 @@ const Inventory = () => {
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("inventory").select("*");
+      const { data, error } = await supabase
+        .from("staging_shopify_inventory")
+        .select("*");
 
       if (error) {
         toast.error("Failed to fetch inventory");
         throw error;
       }
 
-      const mainProducts = data.filter(item => !item.parent_id);
+      const mainProducts = data.filter(item => !item.option1_name);
       console.log('Number of main products:', mainProducts.length);
       
       return data;
@@ -28,7 +30,7 @@ const Inventory = () => {
   });
 
   const filteredItems = inventoryItems?.filter(item => 
-    item.sku?.toLowerCase().includes(searchTerm.toLowerCase())
+    item.variant_sku?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
   return (

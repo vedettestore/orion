@@ -29,9 +29,9 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
     queryKey: ["inventory"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("inventory")
-        .select("sku, name")
-        .not("sku", "is", null);
+        .from("staging_shopify_inventory")
+        .select("variant_sku, title")
+        .not("variant_sku", "is", null);
       
       if (error) throw error;
       return data;
@@ -48,7 +48,7 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
           className="w-full justify-between"
         >
           {value
-            ? items?.find((item) => item.sku === value)?.sku
+            ? items?.find((item) => item.variant_sku === value)?.variant_sku
             : "Select SKU..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -60,8 +60,8 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
           <CommandGroup>
             {items?.map((item) => (
               <CommandItem
-                key={item.sku}
-                value={item.sku || ""}
+                key={item.variant_sku}
+                value={item.variant_sku || ""}
                 onSelect={(currentValue) => {
                   onChange(currentValue === value ? "" : currentValue);
                   setOpen(false);
@@ -70,10 +70,10 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === item.sku ? "opacity-100" : "opacity-0"
+                    value === item.variant_sku ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {item.sku} - {item.name}
+                {item.variant_sku} - {item.title}
               </CommandItem>
             ))}
           </CommandGroup>
