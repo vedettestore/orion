@@ -103,6 +103,8 @@ export const EditInventoryForm = ({
     updateItem(values);
   };
 
+  const canAddVariant = item.title && !item.option1_name;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -124,7 +126,7 @@ export const EditInventoryForm = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormFields form={form} />
-            {!item.option1_name && (
+            {canAddVariant && (
               <div className="pt-4">
                 <Button
                   type="button"
