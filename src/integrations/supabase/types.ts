@@ -9,88 +9,89 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      inventory: {
+      "Orion Catalog": {
         Row: {
-          barcode: string | null
           category: string | null
-          color: string | null
+          cost_per_item: number | null
           description: string | null
-          id: number
-          "image url": string | null
-          "inventory policy": string | null
-          "inventory tracker": string | null
-          is_variant: boolean | null
-          low_stock_threshold: number | null
-          name: string
-          parent_id: number | null
-          price: number | null
-          quantity: number | null
-          size: string | null
-          sku: string | null
+          image_src: string | null
+          option1_name: string | null
+          option1_value: string | null
+          option2_name: string | null
+          option2_value: string | null
+          published: boolean | null
           status: string | null
           tags: string | null
+          title: string | null
           type: string | null
-          "variant image url": string | null
-          variant_attributes: Json | null
-          warehouse_location: string | null
+          variant_barcode: string | null
+          variant_compare_at_price: number | null
+          variant_fulfillment_service: string | null
+          variant_image: string | null
+          variant_inventory_policy: string | null
+          variant_inventory_tracker: string | null
+          variant_price: number | null
+          variant_requires_shipping: boolean | null
+          variant_sku: string | null
+          variant_taxable: boolean | null
+          variant_weight_unit: string | null
+          vendor: string | null
         }
         Insert: {
-          barcode?: string | null
           category?: string | null
-          color?: string | null
+          cost_per_item?: number | null
           description?: string | null
-          id?: number
-          "image url"?: string | null
-          "inventory policy"?: string | null
-          "inventory tracker"?: string | null
-          is_variant?: boolean | null
-          low_stock_threshold?: number | null
-          name: string
-          parent_id?: number | null
-          price?: number | null
-          quantity?: number | null
-          size?: string | null
-          sku?: string | null
+          image_src?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          published?: boolean | null
           status?: string | null
           tags?: string | null
+          title?: string | null
           type?: string | null
-          "variant image url"?: string | null
-          variant_attributes?: Json | null
-          warehouse_location?: string | null
+          variant_barcode?: string | null
+          variant_compare_at_price?: number | null
+          variant_fulfillment_service?: string | null
+          variant_image?: string | null
+          variant_inventory_policy?: string | null
+          variant_inventory_tracker?: string | null
+          variant_price?: number | null
+          variant_requires_shipping?: boolean | null
+          variant_sku?: string | null
+          variant_taxable?: boolean | null
+          variant_weight_unit?: string | null
+          vendor?: string | null
         }
         Update: {
-          barcode?: string | null
           category?: string | null
-          color?: string | null
+          cost_per_item?: number | null
           description?: string | null
-          id?: number
-          "image url"?: string | null
-          "inventory policy"?: string | null
-          "inventory tracker"?: string | null
-          is_variant?: boolean | null
-          low_stock_threshold?: number | null
-          name?: string
-          parent_id?: number | null
-          price?: number | null
-          quantity?: number | null
-          size?: string | null
-          sku?: string | null
+          image_src?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          published?: boolean | null
           status?: string | null
           tags?: string | null
+          title?: string | null
           type?: string | null
-          "variant image url"?: string | null
-          variant_attributes?: Json | null
-          warehouse_location?: string | null
+          variant_barcode?: string | null
+          variant_compare_at_price?: number | null
+          variant_fulfillment_service?: string | null
+          variant_image?: string | null
+          variant_inventory_policy?: string | null
+          variant_inventory_tracker?: string | null
+          variant_price?: number | null
+          variant_requires_shipping?: boolean | null
+          variant_sku?: string | null
+          variant_taxable?: boolean | null
+          variant_weight_unit?: string | null
+          vendor?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "inventory_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "inventory"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       packing_list_items: {
         Row: {
@@ -423,6 +424,93 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      staging_shopify_inventory: {
+        Row: {
+          category: string | null
+          cost_per_item: number | null
+          description: string | null
+          image_src: string | null
+          option1_name: string | null
+          option1_value: string | null
+          option2_name: string | null
+          option2_value: string | null
+          published: boolean | null
+          status: string | null
+          tags: string | null
+          title: string | null
+          type: string | null
+          variant_barcode: string | null
+          variant_compare_at_price: number | null
+          variant_fulfillment_service: string | null
+          variant_grams: number | null
+          variant_image: string | null
+          variant_inventory_policy: string | null
+          variant_inventory_tracker: string | null
+          variant_price: number | null
+          variant_requires_shipping: boolean | null
+          variant_sku: string | null
+          variant_taxable: boolean | null
+          variant_weight_unit: string | null
+          vendor: string | null
+        }
+        Insert: {
+          category?: string | null
+          cost_per_item?: number | null
+          description?: string | null
+          image_src?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          published?: boolean | null
+          status?: string | null
+          tags?: string | null
+          title?: string | null
+          type?: string | null
+          variant_barcode?: string | null
+          variant_compare_at_price?: number | null
+          variant_fulfillment_service?: string | null
+          variant_grams?: number | null
+          variant_image?: string | null
+          variant_inventory_policy?: string | null
+          variant_inventory_tracker?: string | null
+          variant_price?: number | null
+          variant_requires_shipping?: boolean | null
+          variant_sku?: string | null
+          variant_taxable?: boolean | null
+          variant_weight_unit?: string | null
+          vendor?: string | null
+        }
+        Update: {
+          category?: string | null
+          cost_per_item?: number | null
+          description?: string | null
+          image_src?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          published?: boolean | null
+          status?: string | null
+          tags?: string | null
+          title?: string | null
+          type?: string | null
+          variant_barcode?: string | null
+          variant_compare_at_price?: number | null
+          variant_fulfillment_service?: string | null
+          variant_grams?: number | null
+          variant_image?: string | null
+          variant_inventory_policy?: string | null
+          variant_inventory_tracker?: string | null
+          variant_price?: number | null
+          variant_requires_shipping?: boolean | null
+          variant_sku?: string | null
+          variant_taxable?: boolean | null
+          variant_weight_unit?: string | null
+          vendor?: string | null
+        }
+        Relationships: []
       }
       suppliers: {
         Row: {
