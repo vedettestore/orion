@@ -10,7 +10,6 @@ export const InventoryTableHeader = () => {
       <TableRow className="bg-gray-50 hover:bg-gray-50">
         <TableHead className="w-8"></TableHead>
         <TableHead className="font-semibold">Product</TableHead>
-        <TableHead className="font-semibold">Title</TableHead>
         <TableHead className="font-semibold">Type</TableHead>
         <TableHead className="font-semibold">SKU</TableHead>
         <TableHead className="font-semibold">Quantity</TableHead>
