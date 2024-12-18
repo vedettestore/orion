@@ -9,89 +9,34 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      "Orion Catalog": {
+      images: {
         Row: {
-          category: string | null
-          cost_per_item: number | null
-          description: string | null
+          id: number
           image_src: string | null
-          option1_name: string | null
-          option1_value: string | null
-          option2_name: string | null
-          option2_value: string | null
-          published: boolean | null
-          status: string | null
-          tags: string | null
-          title: string | null
-          type: string | null
-          variant_barcode: string | null
-          variant_compare_at_price: number | null
-          variant_fulfillment_service: string | null
+          product_id: number | null
           variant_image: string | null
-          variant_inventory_policy: string | null
-          variant_inventory_tracker: string | null
-          variant_price: number | null
-          variant_requires_shipping: boolean | null
-          variant_sku: string | null
-          variant_taxable: boolean | null
-          variant_weight_unit: string | null
-          vendor: string | null
         }
         Insert: {
-          category?: string | null
-          cost_per_item?: number | null
-          description?: string | null
+          id?: number
           image_src?: string | null
-          option1_name?: string | null
-          option1_value?: string | null
-          option2_name?: string | null
-          option2_value?: string | null
-          published?: boolean | null
-          status?: string | null
-          tags?: string | null
-          title?: string | null
-          type?: string | null
-          variant_barcode?: string | null
-          variant_compare_at_price?: number | null
-          variant_fulfillment_service?: string | null
+          product_id?: number | null
           variant_image?: string | null
-          variant_inventory_policy?: string | null
-          variant_inventory_tracker?: string | null
-          variant_price?: number | null
-          variant_requires_shipping?: boolean | null
-          variant_sku?: string | null
-          variant_taxable?: boolean | null
-          variant_weight_unit?: string | null
-          vendor?: string | null
         }
         Update: {
-          category?: string | null
-          cost_per_item?: number | null
-          description?: string | null
+          id?: number
           image_src?: string | null
-          option1_name?: string | null
-          option1_value?: string | null
-          option2_name?: string | null
-          option2_value?: string | null
-          published?: boolean | null
-          status?: string | null
-          tags?: string | null
-          title?: string | null
-          type?: string | null
-          variant_barcode?: string | null
-          variant_compare_at_price?: number | null
-          variant_fulfillment_service?: string | null
+          product_id?: number | null
           variant_image?: string | null
-          variant_inventory_policy?: string | null
-          variant_inventory_tracker?: string | null
-          variant_price?: number | null
-          variant_requires_shipping?: boolean | null
-          variant_sku?: string | null
-          variant_taxable?: boolean | null
-          variant_weight_unit?: string | null
-          vendor?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       packing_list_items: {
         Row: {
@@ -161,6 +106,36 @@ export type Database = {
           notes?: string | null
           order_number?: string
           status?: string | null
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          description: string | null
+          id: number
+          product_type: string | null
+          published: boolean | null
+          status: string | null
+          title: string | null
+          vendor: string | null
+        }
+        Insert: {
+          description?: string | null
+          id?: number
+          product_type?: string | null
+          published?: boolean | null
+          status?: string | null
+          title?: string | null
+          vendor?: string | null
+        }
+        Update: {
+          description?: string | null
+          id?: number
+          product_type?: string | null
+          published?: boolean | null
+          status?: string | null
+          title?: string | null
+          vendor?: string | null
         }
         Relationships: []
       }
@@ -544,6 +519,103 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      tags: {
+        Row: {
+          id: number
+          product_id: number | null
+          tag: string | null
+        }
+        Insert: {
+          id?: number
+          product_id?: number | null
+          tag?: string | null
+        }
+        Update: {
+          id?: number
+          product_id?: number | null
+          tag?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tags_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      variants: {
+        Row: {
+          barcode: string | null
+          compare_at_price: number | null
+          cost_per_item: number | null
+          fulfillment_service: string | null
+          id: number
+          inventory_policy: string | null
+          inventory_tracker: string | null
+          option1_name: string | null
+          option1_value: string | null
+          option2_name: string | null
+          option2_value: string | null
+          price: number | null
+          product_id: number | null
+          requires_shipping: boolean | null
+          sku: string | null
+          taxable: boolean | null
+          weight: number | null
+          weight_unit: string | null
+        }
+        Insert: {
+          barcode?: string | null
+          compare_at_price?: number | null
+          cost_per_item?: number | null
+          fulfillment_service?: string | null
+          id?: number
+          inventory_policy?: string | null
+          inventory_tracker?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          price?: number | null
+          product_id?: number | null
+          requires_shipping?: boolean | null
+          sku?: string | null
+          taxable?: boolean | null
+          weight?: number | null
+          weight_unit?: string | null
+        }
+        Update: {
+          barcode?: string | null
+          compare_at_price?: number | null
+          cost_per_item?: number | null
+          fulfillment_service?: string | null
+          id?: number
+          inventory_policy?: string | null
+          inventory_tracker?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          price?: number | null
+          product_id?: number | null
+          requires_shipping?: boolean | null
+          sku?: string | null
+          taxable?: boolean | null
+          weight?: number | null
+          weight_unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
