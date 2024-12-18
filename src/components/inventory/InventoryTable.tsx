@@ -36,14 +36,25 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     );
   };
 
-  // Group items by their main product (those without option1_name) and variants
-  const mainProducts = data.filter(item => !item.option1_name);
+  // Show all items as main products if they don't have variants
+  const mainProducts = data.filter(item => 
+    !item.option1_name || // Items without options are main products
+    (item.option1_name && !data.some(other => // Or items that are the first of their variant group
+      other !== item && 
+      other.variant_sku === item.variant_sku
+    ))
+  );
+
+  // Group variants by their parent SKU
   const variantsByParent = data.reduce((acc, item) => {
     if (item.option1_name && item.variant_sku) {
       if (!acc[item.variant_sku]) {
         acc[item.variant_sku] = [];
       }
-      acc[item.variant_sku].push(item);
+      // Only add as variant if it's not the main product
+      if (!mainProducts.includes(item)) {
+        acc[item.variant_sku].push(item);
+      }
     }
     return acc;
   }, {} as Record<string, InventoryItem[]>);
