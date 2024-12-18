@@ -36,14 +36,14 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     );
   };
 
+  // Group items by their main product (those without option1_name) and variants
   const mainProducts = data.filter(item => !item.option1_name);
   const variantsByParent = data.reduce((acc, item) => {
-    if (item.option1_name) {
-      const parentId = item.variant_sku;
-      if (!acc[parentId!]) {
-        acc[parentId!] = [];
+    if (item.option1_name && item.variant_sku) {
+      if (!acc[item.variant_sku]) {
+        acc[item.variant_sku] = [];
       }
-      acc[parentId!].push(item);
+      acc[item.variant_sku].push(item);
     }
     return acc;
   }, {} as Record<string, InventoryItem[]>);
@@ -59,16 +59,16 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
           <InventoryTableHeader />
           <TableBody>
             {mainProducts.map((item, index) => (
-              <React.Fragment key={`${item.variant_sku}-${index}`}>
+              <React.Fragment key={item.variant_sku || index}>
                 <MainProductRow
                   item={item}
-                  hasVariants={!!variantsByParent[item.variant_sku!]?.length}
-                  isExpanded={expandedItems.includes(parseInt(item.variant_sku!))}
-                  onToggleExpand={() => toggleExpand(parseInt(item.variant_sku!))}
+                  hasVariants={!!variantsByParent[item.variant_sku || '']?.length}
+                  isExpanded={expandedItems.includes(parseInt(item.variant_sku || '0'))}
+                  onToggleExpand={() => toggleExpand(parseInt(item.variant_sku || '0'))}
                   onEdit={setEditingItem}
                 />
-                {expandedItems.includes(parseInt(item.variant_sku!)) &&
-                  variantsByParent[item.variant_sku!]?.map((variant, variantIndex) => (
+                {expandedItems.includes(parseInt(item.variant_sku || '0')) &&
+                  variantsByParent[item.variant_sku || '']?.map((variant, variantIndex) => (
                     <VariantRow
                       key={`${variant.variant_sku}-${variantIndex}`}
                       variant={variant}

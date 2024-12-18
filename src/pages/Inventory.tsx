@@ -1,40 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InventoryHeader } from "@/components/inventory/InventoryHeader";
 import { InventoryTable } from "@/components/inventory/InventoryTable";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const queryClient = useQueryClient();
-
-  // Add mutation for deleting Alyssa Full Body Suit products
-  const { mutate: deleteAlyssaProducts } = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase
-        .from("staging_shopify_inventory")
-        .delete()
-        .eq("title", "Alyssa Full Body Suit");
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inventory"] });
-      toast.success("Alyssa Full Body Suit products deleted successfully");
-    },
-    onError: (error) => {
-      toast.error("Failed to delete Alyssa Full Body Suit products");
-      console.error("Error deleting products:", error);
-    },
-  });
-
-  // Execute deletion on component mount
-  useEffect(() => {
-    deleteAlyssaProducts();
-  }, []);
 
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
@@ -44,7 +18,7 @@ const Inventory = () => {
         .select("*");
 
       if (finalError) {
-        toast.error("Failed to fetch final inventory data");
+        toast.error("Failed to fetch inventory data");
         throw finalError;
       }
 
