@@ -21,8 +21,6 @@ const Inventory = () => {
           variant_sku: "117-PARENT",
           type: "Apparel",
           status: "active",
-        }, {
-          onConflict: "variant_sku"
         });
 
       if (insertError) {
@@ -46,22 +44,34 @@ const Inventory = () => {
         item.variant_sku !== "117-PARENT"
       );
 
-      if (variants.length > 0) {
+      // Update each variant individually to properly handle the title splitting
+      for (const variant of variants) {
+        const sizeValue = variant.title.split(" - ")[1] || "Default";
         const { error: updateError } = await supabase
           .from("staging_shopify_inventory")
           .update({ 
             option1_name: "Size",
-            option1_value: (row: any) => row.title.split(" - ")[1] || "Default"
+            option1_value: sizeValue
           })
-          .in("variant_sku", variants.map(v => v.variant_sku));
+          .eq("variant_sku", variant.variant_sku);
 
         if (updateError) {
-          toast.error("Failed to update variants");
-          throw updateError;
+          toast.error(`Failed to update variant ${variant.variant_sku}`);
+          console.error("Update error:", updateError);
         }
       }
 
-      return data;
+      // Fetch the updated data
+      const { data: updatedData, error: refetchError } = await supabase
+        .from("staging_shopify_inventory")
+        .select("*");
+
+      if (refetchError) {
+        toast.error("Failed to fetch updated inventory");
+        throw refetchError;
+      }
+
+      return updatedData;
     },
   });
 
