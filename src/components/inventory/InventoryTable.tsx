@@ -8,7 +8,6 @@ import { LoadingState } from "./LoadingState";
 
 interface InventoryItem {
   title: string;
-  type?: string;
   variant_sku?: string;
   status?: string;
   image_src?: string;
@@ -59,8 +58,8 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
         <Table>
           <InventoryTableHeader />
           <TableBody>
-            {mainProducts.map((item) => (
-              <React.Fragment key={item.variant_sku}>
+            {mainProducts.map((item, index) => (
+              <React.Fragment key={`${item.variant_sku}-${index}`}>
                 <MainProductRow
                   item={item}
                   hasVariants={!!variantsByParent[item.variant_sku!]?.length}
@@ -69,9 +68,9 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
                   onEdit={setEditingItem}
                 />
                 {expandedItems.includes(parseInt(item.variant_sku!)) &&
-                  variantsByParent[item.variant_sku!]?.map((variant) => (
+                  variantsByParent[item.variant_sku!]?.map((variant, variantIndex) => (
                     <VariantRow
-                      key={variant.variant_sku}
+                      key={`${variant.variant_sku}-${variantIndex}`}
                       variant={variant}
                       onEdit={setEditingItem}
                     />
