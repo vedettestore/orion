@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { EditInventoryForm } from "./EditInventoryForm";
 import { Json } from "@/integrations/supabase/types";
@@ -48,6 +48,8 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     }
     return acc;
   }, {} as Record<number, InventoryItem[]>);
+
+  console.log('Number of main products:', mainProducts.length);
 
   if (isLoading) {
     return <LoadingState />;
