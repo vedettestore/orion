@@ -9,9 +9,23 @@ import { BulkEditTable } from "@/components/inventory/BulkEditTable";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 
+interface InventoryItem {
+  title: string;
+  type?: string;
+  variant_sku?: string;
+  status?: string;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
+}
+
 const BulkEdit = () => {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [editedData, setEditedData] = useState<Record<number, Record<string, any>>>({});
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [editedData, setEditedData] = useState<Record<string, Record<string, any>>>({});
 
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
@@ -23,17 +37,17 @@ const BulkEdit = () => {
         toast.error("Failed to fetch inventory");
         throw error;
       }
-      return data;
+      return data as InventoryItem[];
     },
   });
 
   const handleSaveChanges = async () => {
     try {
-      for (const [id, changes] of Object.entries(editedData)) {
+      for (const [sku, changes] of Object.entries(editedData)) {
         const { error } = await supabase
           .from("staging_shopify_inventory")
           .update(changes)
-          .eq("id", id);
+          .eq("variant_sku", sku);
         
         if (error) throw error;
       }

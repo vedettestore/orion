@@ -7,7 +7,6 @@ import { VariantRow } from "./VariantRow";
 import { LoadingState } from "./LoadingState";
 
 interface InventoryItem {
-  id?: number;
   title: string;
   type?: string;
   variant_sku?: string;
@@ -41,14 +40,14 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
   const mainProducts = data.filter(item => !item.option1_name);
   const variantsByParent = data.reduce((acc, item) => {
     if (item.option1_name) {
-      const parentId = item.id;
+      const parentId = item.variant_sku;
       if (!acc[parentId!]) {
         acc[parentId!] = [];
       }
       acc[parentId!].push(item);
     }
     return acc;
-  }, {} as Record<number, InventoryItem[]>);
+  }, {} as Record<string, InventoryItem[]>);
 
   if (isLoading) {
     return <LoadingState />;
@@ -61,18 +60,18 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
           <InventoryTableHeader />
           <TableBody>
             {mainProducts.map((item) => (
-              <React.Fragment key={item.id}>
+              <React.Fragment key={item.variant_sku}>
                 <MainProductRow
                   item={item}
-                  hasVariants={!!variantsByParent[item.id!]?.length}
-                  isExpanded={expandedItems.includes(item.id!)}
-                  onToggleExpand={() => toggleExpand(item.id!)}
+                  hasVariants={!!variantsByParent[item.variant_sku!]?.length}
+                  isExpanded={expandedItems.includes(parseInt(item.variant_sku!))}
+                  onToggleExpand={() => toggleExpand(parseInt(item.variant_sku!))}
                   onEdit={setEditingItem}
                 />
-                {expandedItems.includes(item.id!) &&
-                  variantsByParent[item.id!]?.map((variant) => (
+                {expandedItems.includes(parseInt(item.variant_sku!)) &&
+                  variantsByParent[item.variant_sku!]?.map((variant) => (
                     <VariantRow
-                      key={variant.id}
+                      key={variant.variant_sku}
                       variant={variant}
                       onEdit={setEditingItem}
                     />
