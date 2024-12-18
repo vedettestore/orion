@@ -40,54 +40,52 @@ const Inventory = () => {
         if (insertError) {
           console.error("Failed to create parent product:", insertError);
           toast.error("Failed to create parent product");
-          throw insertError;
         }
       }
 
-      // Fetch all inventory items starting with SKU 117
-      const { data: variants, error: variantsError } = await supabase
-        .from("staging_shopify_inventory")
-        .select("*")
-        .like("variant_sku", "117%");
-
-      if (variantsError) {
-        console.error("Failed to fetch variants:", variantsError);
-        toast.error("Failed to fetch variants");
-        throw variantsError;
-      }
-
-      // Update each variant to reference the parent
-      for (const variant of variants) {
-        if (variant.variant_sku !== "117-PARENT") {
-          const sizeMatch = variant.title.match(/- (\w+)$/);
-          const sizeValue = sizeMatch ? sizeMatch[1] : "Default";
-          
-          const { error: updateError } = await supabase
-            .from("staging_shopify_inventory")
-            .update({
-              option1_name: "Size",
-              option1_value: sizeValue
-            })
-            .eq("variant_sku", variant.variant_sku);
-
-          if (updateError) {
-            console.error(`Failed to update variant ${variant.variant_sku}:`, updateError);
-            toast.error(`Failed to update variant ${variant.variant_sku}`);
-          }
-        }
-      }
-
-      // Fetch all inventory items again to get the updated data
-      const { data: finalData, error: finalError } = await supabase
+      // Fetch all inventory items
+      const { data, error } = await supabase
         .from("staging_shopify_inventory")
         .select("*");
 
-      if (finalError) {
-        toast.error("Failed to fetch final inventory data");
-        throw finalError;
+      if (error) {
+        toast.error("Failed to fetch inventory");
+        throw error;
       }
 
-      return finalData;
+      // Update variants to reference the parent
+      const variants = data.filter(item => 
+        item.variant_sku?.startsWith("117") && 
+        item.variant_sku !== "117-PARENT"
+      );
+
+      // Update each variant individually
+      for (const variant of variants) {
+        const sizeValue = variant.title.split(" - ")[1] || "Default";
+        const { error: updateError } = await supabase
+          .from("staging_shopify_inventory")
+          .update({ 
+            option1_name: "Size",
+            option1_value: sizeValue
+          })
+          .eq("variant_sku", variant.variant_sku);
+
+        if (updateError) {
+          console.error(`Failed to update variant ${variant.variant_sku}:`, updateError);
+        }
+      }
+
+      // Fetch the final updated data
+      const { data: updatedData, error: refetchError } = await supabase
+        .from("staging_shopify_inventory")
+        .select("*");
+
+      if (refetchError) {
+        toast.error("Failed to fetch updated inventory");
+        throw refetchError;
+      }
+
+      return updatedData;
     },
   });
 
