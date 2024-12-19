@@ -606,7 +606,15 @@ export type Database = {
           weight?: number | null
           weight_unit?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
