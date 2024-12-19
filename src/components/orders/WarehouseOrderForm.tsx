@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PackageSearch, Truck, Clock, AlertTriangle } from 'lucide-react';
 
-export const WarehouseOrderForm = () => {
+const WarehouseOrderForm = () => {
   // Form state management
   const [formData, setFormData] = useState({
     orderType: 'standard',
@@ -71,7 +71,7 @@ export const WarehouseOrderForm = () => {
   return (
     <div className="space-y-6 p-6">
       <Tabs defaultValue="orderInfo" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList>
           <TabsTrigger value="orderInfo">Order Information</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
           <TabsTrigger value="fulfillment">Fulfillment</TabsTrigger>
@@ -315,11 +315,8 @@ export const WarehouseOrderForm = () => {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <div className="flex justify-end gap-4">
-        <Button variant="outline">Save as Draft</Button>
-        <Button>Create Order</Button>
-      </div>
     </div>
   );
 };
+
+export default WarehouseOrderForm;
