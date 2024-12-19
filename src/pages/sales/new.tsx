@@ -1,6 +1,6 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { WarehouseOrderForm } from "@/components/orders/WarehouseOrderForm";
+import WarehouseOrderForm from "@/components/orders/WarehouseOrderForm";
 
 export default function NewOrder() {
   return (
