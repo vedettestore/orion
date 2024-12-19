@@ -22,10 +22,15 @@ interface ComboboxDemoProps {
   onChange: (value: string) => void;
 }
 
+interface InventoryItem {
+  variant_sku: string;
+  title: string;
+}
+
 export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
   const [open, setOpen] = useState(false);
 
-  const { data: items } = useQuery({
+  const { data: items, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -34,7 +39,7 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
         .not("variant_sku", "is", null);
       
       if (error) throw error;
-      return data;
+      return (data || []) as InventoryItem[];
     },
   });
 
@@ -46,9 +51,10 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          disabled={isLoading}
         >
           {value
-            ? items?.find((item) => item.variant_sku === value)?.variant_sku
+            ? items?.find((item) => item.variant_sku === value)?.variant_sku || value
             : "Select SKU..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -58,10 +64,10 @@ export function ComboboxDemo({ value, onChange }: ComboboxDemoProps) {
           <CommandInput placeholder="Search SKU..." />
           <CommandEmpty>No SKU found.</CommandEmpty>
           <CommandGroup>
-            {items?.map((item) => (
+            {(items || []).map((item) => (
               <CommandItem
                 key={item.variant_sku}
-                value={item.variant_sku || ""}
+                value={item.variant_sku}
                 onSelect={(currentValue) => {
                   onChange(currentValue === value ? "" : currentValue);
                   setOpen(false);

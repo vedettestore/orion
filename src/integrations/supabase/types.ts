@@ -65,6 +65,110 @@ export type Database = {
           },
         ]
       }
+      kit_components: {
+        Row: {
+          created_at: string | null
+          id: number
+          kit_id: number | null
+          quantity: number
+          variant_id: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: never
+          kit_id?: number | null
+          quantity?: number
+          variant_id?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: never
+          kit_id?: number | null
+          quantity?: number
+          variant_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_components_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_components_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kits: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: never
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: never
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      locations: {
+        Row: {
+          aisle: string
+          bin: string
+          created_at: string | null
+          id: number
+          rack: string
+          shelf: string
+          updated_at: string | null
+          zone_id: number | null
+        }
+        Insert: {
+          aisle: string
+          bin: string
+          created_at?: string | null
+          id?: never
+          rack: string
+          shelf: string
+          updated_at?: string | null
+          zone_id?: number | null
+        }
+        Update: {
+          aisle?: string
+          bin?: string
+          created_at?: string | null
+          id?: never
+          rack?: string
+          shelf?: string
+          updated_at?: string | null
+          zone_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "locations_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       packing_list_items: {
         Row: {
           id: number
@@ -108,6 +212,7 @@ export type Database = {
       }
       packing_lists: {
         Row: {
+          channel_type: string | null
           created_at: string | null
           created_by: string | null
           customer_name: string | null
@@ -117,6 +222,7 @@ export type Database = {
           status: string | null
         }
         Insert: {
+          channel_type?: string | null
           created_at?: string | null
           created_by?: string | null
           customer_name?: string | null
@@ -126,12 +232,37 @@ export type Database = {
           status?: string | null
         }
         Update: {
+          channel_type?: string | null
           created_at?: string | null
           created_by?: string | null
           customer_name?: string | null
           id?: number
           notes?: string | null
           order_number?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      picking_waves: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          id: number
+          status: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: never
+          status?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: never
           status?: string | null
         }
         Relationships: []
@@ -675,6 +806,7 @@ export type Database = {
           id: number
           inventory_policy: string | null
           inventory_tracker: string | null
+          location_id: number | null
           option1_name: string | null
           option1_value: string | null
           option2_name: string | null
@@ -695,6 +827,7 @@ export type Database = {
           id?: number
           inventory_policy?: string | null
           inventory_tracker?: string | null
+          location_id?: number | null
           option1_name?: string | null
           option1_value?: string | null
           option2_name?: string | null
@@ -715,6 +848,7 @@ export type Database = {
           id?: number
           inventory_policy?: string | null
           inventory_tracker?: string | null
+          location_id?: number | null
           option1_name?: string | null
           option1_value?: string | null
           option2_name?: string | null
@@ -729,6 +863,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "variants_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "variants_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
@@ -736,6 +877,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      wave_orders: {
+        Row: {
+          created_at: string | null
+          id: number
+          packing_list_id: number | null
+          wave_id: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: never
+          packing_list_id?: number | null
+          wave_id?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: never
+          packing_list_id?: number | null
+          wave_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wave_orders_packing_list_id_fkey"
+            columns: ["packing_list_id"]
+            isOneToOne: false
+            referencedRelation: "packing_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wave_orders_wave_id_fkey"
+            columns: ["wave_id"]
+            isOneToOne: false
+            referencedRelation: "picking_waves"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zones: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: never
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: never
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
