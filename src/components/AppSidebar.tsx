@@ -18,8 +18,6 @@ import {
   History, 
   Settings2,
   ChevronRight,
-  ShoppingCart,
-  PackageCheck,
   LogOut
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -34,8 +32,6 @@ export const menuItems = [
   { title: "Items", icon: BoxesIcon, url: "/items" },
   { title: "Locations", icon: Building2, url: "/locations" },
   { title: "Team", icon: Users2, url: "/team" },
-  { title: "Pick & Pack", icon: PackageCheck, url: "/pick-pack" },
-  { title: "Purchasing", icon: ShoppingCart, url: "/purchasing" },
   { title: "History", icon: History, url: "/history" },
   { title: "Settings", icon: Settings2, url: "/settings" },
 ];
