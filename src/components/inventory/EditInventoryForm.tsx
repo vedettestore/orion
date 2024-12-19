@@ -25,15 +25,17 @@ export const EditInventoryForm = ({
   open,
   onOpenChange,
 }: EditInventoryFormProps) => {
+  const isVariant = 'sku' in item;
+  
   const form = useForm({
     defaultValues: {
-      title: 'variant' in item ? item.title : item.title || '',
-      type: 'product_type' in item ? item.product_type || '' : '',
-      variant_sku: 'sku' in item ? item.sku || '' : '',
-      status: 'status' in item ? item.status || '' : '',
+      title: isVariant ? '' : (item as Product).title || '',
+      type: isVariant ? '' : (item as Product).product_type || '',
+      variant_sku: isVariant ? (item as Variant).sku || '' : '',
+      status: isVariant ? '' : (item as Product).status || '',
       image_src: 'images' in item && item.images?.[0]?.src || '',
-      variant_grams: 'weight' in item ? item.weight || 0 : 0,
-      variant_barcode: 'barcode' in item ? item.barcode || '' : '',
+      variant_grams: isVariant ? (item as Variant).weight || 0 : 0,
+      variant_barcode: isVariant ? (item as Variant).barcode || '' : '',
     },
   });
 
@@ -41,8 +43,7 @@ export const EditInventoryForm = ({
 
   const { mutate: updateItem, isPending } = useMutation({
     mutationFn: async (values: any) => {
-      if ('sku' in item) {
-        // It's a variant
+      if (isVariant) {
         const { error } = await supabase
           .from("variants")
           .update({
@@ -53,7 +54,6 @@ export const EditInventoryForm = ({
           .eq("id", item.id);
         if (error) throw error;
       } else {
-        // It's a product
         const { error } = await supabase
           .from("products")
           .update({
@@ -86,7 +86,7 @@ export const EditInventoryForm = ({
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">
-              Edit {('sku' in item) ? 'Variant' : 'Product'}
+              Edit {isVariant ? 'Variant' : 'Product'}
             </DialogTitle>
             <Button
               variant="ghost"
@@ -100,7 +100,7 @@ export const EditInventoryForm = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormFields form={form} isVariant={'sku' in item} />
+            <FormFields form={form} isVariant={isVariant} />
             <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"

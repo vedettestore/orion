@@ -38,7 +38,9 @@ export const VariantRow = ({ variant, onEdit }: VariantRowProps) => {
             />
           )}
           <div className="flex flex-col">
-            <span className="font-medium text-gray-900">Variant</span>
+            <span className="font-medium text-gray-900">
+              {variant.sku || "No SKU"}
+            </span>
             {renderVariantAttributes(variant)}
           </div>
         </div>
