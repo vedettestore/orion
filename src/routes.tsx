@@ -9,6 +9,7 @@ import Locations from "@/pages/Locations";
 import Settings from "@/pages/Settings";
 import Team from "@/pages/Team";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import WarehouseOrderForm from "@/components/orders/WarehouseOrderForm";
 
 export const routes = [
   {
@@ -76,6 +77,24 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <Team />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/sales/new",
+    element: (
+      <ProtectedRoute>
+        <div className="min-h-screen flex w-full bg-gray-50">
+          <main className="flex-1 p-8">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">Create New Sales Order</h1>
+                <p className="text-muted-foreground">Create a new sales order for processing</p>
+              </div>
+              <WarehouseOrderForm />
+            </div>
+          </main>
+        </div>
       </ProtectedRoute>
     ),
   },
