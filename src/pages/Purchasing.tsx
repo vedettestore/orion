@@ -41,7 +41,7 @@ export default function Purchasing() {
     },
     {
       accessorKey: "customer_name",
-      header: "Customer",
+      header: "Customer Name", // Changed from "Customer" to "Customer Name"
     },
     {
       accessorKey: "order_total",
