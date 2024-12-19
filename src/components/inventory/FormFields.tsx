@@ -19,100 +19,97 @@ interface InventoryFormData {
 
 interface FormFieldsProps {
   form: UseFormReturn<InventoryFormData>;
+  isVariant?: boolean;
 }
 
-export const FormFields = ({ form }: FormFieldsProps) => {
+export const FormFields = ({ form, isVariant }: FormFieldsProps) => {
   return (
     <>
-      <FormField
-        control={form.control}
-        name="title"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">Title</FormLabel>
-            <FormControl>
-              <Input {...field} className="focus-visible:ring-primary" />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="type"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">Type</FormLabel>
-            <FormControl>
-              <Input {...field} className="focus-visible:ring-primary" />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="variant_sku"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">SKU</FormLabel>
-            <FormControl>
-              <Input {...field} className="focus-visible:ring-primary" />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="variant_grams"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">Weight (grams)</FormLabel>
-            <FormControl>
-              <Input
-                type="number"
-                {...field}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-                className="focus-visible:ring-primary"
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="variant_barcode"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">UPC/Barcode</FormLabel>
-            <FormControl>
-              <Input {...field} className="focus-visible:ring-primary" />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="status"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">Status</FormLabel>
-            <FormControl>
-              <Input {...field} className="focus-visible:ring-primary" />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="image_src"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-gray-700">Image URL</FormLabel>
-            <FormControl>
-              <Input {...field} className="focus-visible:ring-primary" />
-            </FormControl>
-          </FormItem>
-        )}
-      />
+      {!isVariant && (
+        <>
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-700">Title</FormLabel>
+                <FormControl>
+                  <Input {...field} className="focus-visible:ring-primary" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-700">Type</FormLabel>
+                <FormControl>
+                  <Input {...field} className="focus-visible:ring-primary" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-700">Status</FormLabel>
+                <FormControl>
+                  <Input {...field} className="focus-visible:ring-primary" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </>
+      )}
+      {isVariant && (
+        <>
+          <FormField
+            control={form.control}
+            name="variant_sku"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-700">SKU</FormLabel>
+                <FormControl>
+                  <Input {...field} className="focus-visible:ring-primary" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="variant_grams"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-700">Weight (grams)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    className="focus-visible:ring-primary"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="variant_barcode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-700">UPC/Barcode</FormLabel>
+                <FormControl>
+                  <Input {...field} className="focus-visible:ring-primary" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </>
+      )}
     </>
   );
 };

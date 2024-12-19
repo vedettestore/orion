@@ -12,23 +12,10 @@ import {
 } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { FormFields } from "./FormFields";
-
-interface InventoryItem {
-  title: string;
-  type?: string;
-  variant_sku?: string;
-  status?: string;
-  image_src?: string;
-  variant_grams?: number;
-  variant_barcode?: string;
-  option1_name?: string;
-  option1_value?: string;
-  option2_name?: string;
-  option2_value?: string;
-}
+import { Product, Variant } from "@/types/inventory";
 
 interface EditInventoryFormProps {
-  item: InventoryItem;
+  item: Product | Variant;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -40,26 +27,43 @@ export const EditInventoryForm = ({
 }: EditInventoryFormProps) => {
   const form = useForm({
     defaultValues: {
-      title: item.title,
-      type: item.type || "",
-      variant_sku: item.variant_sku || "",
-      status: item.status || "",
-      image_src: item.image_src || "",
-      variant_grams: item.variant_grams || 0,
-      variant_barcode: item.variant_barcode || "",
+      title: 'variant' in item ? item.title : item.title || '',
+      type: 'product_type' in item ? item.product_type || '' : '',
+      variant_sku: 'sku' in item ? item.sku || '' : '',
+      status: 'status' in item ? item.status || '' : '',
+      image_src: 'images' in item && item.images?.[0]?.src || '',
+      variant_grams: 'weight' in item ? item.weight || 0 : 0,
+      variant_barcode: 'barcode' in item ? item.barcode || '' : '',
     },
   });
 
   const queryClient = useQueryClient();
 
   const { mutate: updateItem, isPending } = useMutation({
-    mutationFn: async (values: Partial<InventoryItem>) => {
-      const { error } = await supabase
-        .from("staging_shopify_inventory")
-        .update(values)
-        .eq("variant_sku", item.variant_sku);
-
-      if (error) throw error;
+    mutationFn: async (values: any) => {
+      if ('sku' in item) {
+        // It's a variant
+        const { error } = await supabase
+          .from("variants")
+          .update({
+            sku: values.variant_sku,
+            weight: values.variant_grams,
+            barcode: values.variant_barcode,
+          })
+          .eq("id", item.id);
+        if (error) throw error;
+      } else {
+        // It's a product
+        const { error } = await supabase
+          .from("products")
+          .update({
+            title: values.title,
+            product_type: values.type,
+            status: values.status,
+          })
+          .eq("id", item.id);
+        if (error) throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inventory"] });
@@ -72,7 +76,7 @@ export const EditInventoryForm = ({
     },
   });
 
-  const onSubmit = (values: Partial<InventoryItem>) => {
+  const onSubmit = (values: any) => {
     updateItem(values);
   };
 
@@ -82,7 +86,7 @@ export const EditInventoryForm = ({
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">
-              Edit Inventory Item
+              Edit {('sku' in item) ? 'Variant' : 'Product'}
             </DialogTitle>
             <Button
               variant="ghost"
@@ -96,7 +100,7 @@ export const EditInventoryForm = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormFields form={form} />
+            <FormFields form={form} isVariant={'sku' in item} />
             <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"
