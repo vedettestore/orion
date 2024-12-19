@@ -35,7 +35,7 @@ const Inventory = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar />
-        <main className="flex-1 p-2 md:p-8 overflow-x-hidden">
+        <main className="flex-1 p-4 md:p-8">
           <InventoryHeader onSearch={setSearchTerm} searchTerm={searchTerm} />
           <div className="rounded-lg border bg-card">
             <InventoryTable data={filteredItems} isLoading={isLoading} />
