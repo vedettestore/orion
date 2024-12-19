@@ -4,6 +4,7 @@ import Auth from "@/pages/Auth";
 import Inventory from "@/pages/Inventory";
 import Items from "@/pages/Items";
 import BulkEdit from "@/pages/BulkEdit";
+import PickPack from "@/pages/PickPack";
 import Purchasing from "@/pages/Purchasing";
 import History from "@/pages/History";
 import Locations from "@/pages/Locations";
@@ -45,6 +46,14 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <Items />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/pick-pack",
+    element: (
+      <ProtectedRoute>
+        <PickPack />
       </ProtectedRoute>
     ),
   },
