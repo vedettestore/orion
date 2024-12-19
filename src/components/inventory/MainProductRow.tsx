@@ -4,36 +4,25 @@ import { StatusBadge } from "./StatusBadge";
 import { ActionButtons } from "./ActionButtons";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
-
-interface InventoryItem {
-  title: string;
-  type?: string;
-  variant_sku?: string;
-  status?: string;
-  image_src?: string;
-  variant_grams?: number;
-  variant_barcode?: string;
-  option1_name?: string;
-  option1_value?: string;
-  option2_name?: string;
-  option2_value?: string;
-}
+import { Product } from "@/types/inventory";
 
 interface MainProductRowProps {
-  item: InventoryItem;
+  product: Product;
   hasVariants: boolean;
   isExpanded: boolean;
   onToggleExpand: () => void;
-  onEdit: (item: InventoryItem) => void;
+  onEdit: () => void;
 }
 
 export const MainProductRow = ({
-  item,
+  product,
   hasVariants,
   isExpanded,
   onToggleExpand,
   onEdit,
 }: MainProductRowProps) => {
+  const mainImage = product.images?.[0]?.src;
+
   return (
     <TableRow className="hover:bg-gray-50/50">
       <TableCell>
@@ -52,12 +41,16 @@ export const MainProductRow = ({
           </Button>
         )}
       </TableCell>
-      <ProductCell name={item.title} imageUrl={item.image_src} />
-      <TableCell className="text-gray-600">{item.variant_sku || "N/A"}</TableCell>
-      <TableCell className="text-gray-600">{item.variant_grams || 0}</TableCell>
-      <TableCell className="text-gray-600">{item.variant_barcode || "N/A"}</TableCell>
-      <StatusBadge status={item.status || ""} />
-      <ActionButtons item={item} onEdit={() => onEdit(item)} />
+      <ProductCell name={product.title} imageUrl={mainImage} />
+      <TableCell className="text-gray-600">{product.product_type || "N/A"}</TableCell>
+      <TableCell className="text-gray-600">
+        {product.variants?.[0]?.inventory_quantity || 0}
+      </TableCell>
+      <TableCell className="text-gray-600">
+        {product.variants?.[0]?.sku || "N/A"}
+      </TableCell>
+      <StatusBadge status={product.status || ""} />
+      <ActionButtons item={product} onEdit={onEdit} />
     </TableRow>
   );
 };
