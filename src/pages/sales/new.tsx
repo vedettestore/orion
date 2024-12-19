@@ -1,6 +1,6 @@
-import { CreateOrderForm } from "@/components/orders/CreateOrderForm";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { WarehouseOrderForm } from "@/components/orders/WarehouseOrderForm";
 
 export default function NewOrder() {
   return (
@@ -8,12 +8,12 @@ export default function NewOrder() {
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar />
         <main className="flex-1 p-8">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900">Create New Order</h1>
-              <p className="text-muted-foreground">Create a new order for processing</p>
+              <p className="text-muted-foreground">Create a new sales order</p>
             </div>
-            <CreateOrderForm />
+            <WarehouseOrderForm />
           </div>
         </main>
       </div>
