@@ -28,7 +28,7 @@ export const InventoryHeader = ({ onSearch, searchTerm }: InventoryHeaderProps) 
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Inventory</h1>
           <p className="text-muted-foreground">Manage your inventory items</p>
         </div>
-        <div className="flex flex-wrap gap-2 md:gap-4">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
             className="flex-1 md:flex-none"
@@ -52,8 +52,8 @@ export const InventoryHeader = ({ onSearch, searchTerm }: InventoryHeaderProps) 
               onChange={handleFileUpload}
             />
           </Button>
-          <Link to="/inventory/bulk-edit">
-            <Button className="flex-1 md:flex-none bg-primary hover:bg-primary/90">
+          <Link to="/inventory/bulk-edit" className="flex-1 md:flex-none">
+            <Button className="w-full bg-primary hover:bg-primary/90">
               <Edit2 className="w-4 h-4 mr-2" />
               Bulk Edit
             </Button>

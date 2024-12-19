@@ -5,6 +5,7 @@ import { InventoryTableHeader } from "./TableHeader";
 import { MainProductRow } from "./MainProductRow";
 import { VariantRow } from "./VariantRow";
 import { LoadingState } from "./LoadingState";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface InventoryItem {
   title: string;
@@ -27,6 +28,7 @@ interface InventoryTableProps {
 export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [expandedItems, setExpandedItems] = useState<number[]>([]);
+  const isMobile = useIsMobile();
 
   const toggleExpand = (itemId: number) => {
     setExpandedItems(prev =>
@@ -36,22 +38,19 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
     );
   };
 
-  // Show all items as main products if they don't have variants
   const mainProducts = data.filter(item => 
-    !item.option1_name || // Items without options are main products
-    (item.option1_name && !data.some(other => // Or items that are the first of their variant group
+    !item.option1_name || 
+    (item.option1_name && !data.some(other => 
       other !== item && 
       other.variant_sku === item.variant_sku
     ))
   );
 
-  // Group variants by their parent SKU
   const variantsByParent = data.reduce((acc, item) => {
     if (item.option1_name && item.variant_sku) {
       if (!acc[item.variant_sku]) {
         acc[item.variant_sku] = [];
       }
-      // Only add as variant if it's not the main product
       if (!mainProducts.includes(item)) {
         acc[item.variant_sku].push(item);
       }
@@ -66,30 +65,32 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
   return (
     <>
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <Table>
-          <InventoryTableHeader />
-          <TableBody>
-            {mainProducts.map((item, index) => (
-              <React.Fragment key={item.variant_sku || index}>
-                <MainProductRow
-                  item={item}
-                  hasVariants={!!variantsByParent[item.variant_sku || '']?.length}
-                  isExpanded={expandedItems.includes(parseInt(item.variant_sku || '0'))}
-                  onToggleExpand={() => toggleExpand(parseInt(item.variant_sku || '0'))}
-                  onEdit={setEditingItem}
-                />
-                {expandedItems.includes(parseInt(item.variant_sku || '0')) &&
-                  variantsByParent[item.variant_sku || '']?.map((variant, variantIndex) => (
-                    <VariantRow
-                      key={`${variant.variant_sku}-${variantIndex}`}
-                      variant={variant}
-                      onEdit={setEditingItem}
-                    />
-                  ))}
-              </React.Fragment>
-            ))}
-          </TableBody>
-        </Table>
+        <div className={`overflow-x-auto ${isMobile ? 'max-w-[100vw]' : ''}`}>
+          <Table>
+            <InventoryTableHeader />
+            <TableBody>
+              {mainProducts.map((item, index) => (
+                <React.Fragment key={item.variant_sku || index}>
+                  <MainProductRow
+                    item={item}
+                    hasVariants={!!variantsByParent[item.variant_sku || '']?.length}
+                    isExpanded={expandedItems.includes(parseInt(item.variant_sku || '0'))}
+                    onToggleExpand={() => toggleExpand(parseInt(item.variant_sku || '0'))}
+                    onEdit={setEditingItem}
+                  />
+                  {expandedItems.includes(parseInt(item.variant_sku || '0')) &&
+                    variantsByParent[item.variant_sku || '']?.map((variant, variantIndex) => (
+                      <VariantRow
+                        key={`${variant.variant_sku}-${variantIndex}`}
+                        variant={variant}
+                        onEdit={setEditingItem}
+                      />
+                    ))}
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {editingItem && (
