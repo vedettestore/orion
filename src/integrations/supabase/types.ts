@@ -30,41 +30,6 @@ export type Database = {
         }
         Relationships: []
       }
-      inventory_levels: {
-        Row: {
-          available: number | null
-          created_at: string | null
-          id: number
-          location_id: number | null
-          updated_at: string | null
-          variant_id: number | null
-        }
-        Insert: {
-          available?: number | null
-          created_at?: string | null
-          id?: number
-          location_id?: number | null
-          updated_at?: string | null
-          variant_id?: number | null
-        }
-        Update: {
-          available?: number | null
-          created_at?: string | null
-          id?: number
-          location_id?: number | null
-          updated_at?: string | null
-          variant_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "inventory_levels_variant_id_fkey"
-            columns: ["variant_id"]
-            isOneToOne: false
-            referencedRelation: "variants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       packing_list_items: {
         Row: {
           id: number
@@ -135,54 +100,6 @@ export type Database = {
           status?: string | null
         }
         Relationships: []
-      }
-      product_images: {
-        Row: {
-          alt: string | null
-          created_at: string | null
-          id: number
-          position: number | null
-          product_id: number | null
-          src: string | null
-          updated_at: string | null
-          variant_id: number | null
-        }
-        Insert: {
-          alt?: string | null
-          created_at?: string | null
-          id?: number
-          position?: number | null
-          product_id?: number | null
-          src?: string | null
-          updated_at?: string | null
-          variant_id?: number | null
-        }
-        Update: {
-          alt?: string | null
-          created_at?: string | null
-          id?: number
-          position?: number | null
-          product_id?: number | null
-          src?: string | null
-          updated_at?: string | null
-          variant_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "product_images_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "product_images_variant_id_fkey"
-            columns: ["variant_id"]
-            isOneToOne: false
-            referencedRelation: "variants"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       products: {
         Row: {
@@ -628,44 +545,6 @@ export type Database = {
         }
         Relationships: []
       }
-      variant_options: {
-        Row: {
-          created_at: string | null
-          id: number
-          name: string | null
-          position: number | null
-          updated_at: string | null
-          value: string | null
-          variant_id: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          name?: string | null
-          position?: number | null
-          updated_at?: string | null
-          value?: string | null
-          variant_id?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          name?: string | null
-          position?: number | null
-          updated_at?: string | null
-          value?: string | null
-          variant_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "variant_options_variant_id_fkey"
-            columns: ["variant_id"]
-            isOneToOne: false
-            referencedRelation: "variants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       variants: {
         Row: {
           barcode: string | null
@@ -727,15 +606,7 @@ export type Database = {
           weight?: number | null
           weight_unit?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "variants_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {

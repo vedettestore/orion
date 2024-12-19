@@ -5,17 +5,27 @@ import { InventoryTableHeader } from "./TableHeader";
 import { MainProductRow } from "./MainProductRow";
 import { VariantRow } from "./VariantRow";
 import { LoadingState } from "./LoadingState";
-import { Product, Variant } from "@/types/inventory";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+
+interface InventoryItem {
+  title: string;
+  variant_sku?: string;
+  status?: string;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
+}
 
 interface InventoryTableProps {
-  data: Product[];
+  data: InventoryItem[];
   isLoading: boolean;
 }
 
 export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
-  const [editingItem, setEditingItem] = useState<Product | Variant | null>(null);
+  const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [expandedItems, setExpandedItems] = useState<number[]>([]);
 
   const toggleExpand = (itemId: number) => {
@@ -25,6 +35,29 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
         : [...prev, itemId]
     );
   };
+
+  // Show all items as main products if they don't have variants
+  const mainProducts = data.filter(item => 
+    !item.option1_name || // Items without options are main products
+    (item.option1_name && !data.some(other => // Or items that are the first of their variant group
+      other !== item && 
+      other.variant_sku === item.variant_sku
+    ))
+  );
+
+  // Group variants by their parent SKU
+  const variantsByParent = data.reduce((acc, item) => {
+    if (item.option1_name && item.variant_sku) {
+      if (!acc[item.variant_sku]) {
+        acc[item.variant_sku] = [];
+      }
+      // Only add as variant if it's not the main product
+      if (!mainProducts.includes(item)) {
+        acc[item.variant_sku].push(item);
+      }
+    }
+    return acc;
+  }, {} as Record<string, InventoryItem[]>);
 
   if (isLoading) {
     return <LoadingState />;
@@ -36,21 +69,21 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
         <Table>
           <InventoryTableHeader />
           <TableBody>
-            {data.map((product) => (
-              <React.Fragment key={product.id}>
+            {mainProducts.map((item, index) => (
+              <React.Fragment key={item.variant_sku || index}>
                 <MainProductRow
-                  product={product}
-                  hasVariants={!!(product.variants && product.variants.length > 0)}
-                  isExpanded={expandedItems.includes(product.id)}
-                  onToggleExpand={() => toggleExpand(product.id)}
-                  onEdit={() => setEditingItem(product)}
+                  item={item}
+                  hasVariants={!!variantsByParent[item.variant_sku || '']?.length}
+                  isExpanded={expandedItems.includes(parseInt(item.variant_sku || '0'))}
+                  onToggleExpand={() => toggleExpand(parseInt(item.variant_sku || '0'))}
+                  onEdit={setEditingItem}
                 />
-                {expandedItems.includes(product.id) &&
-                  product.variants?.map((variant) => (
+                {expandedItems.includes(parseInt(item.variant_sku || '0')) &&
+                  variantsByParent[item.variant_sku || '']?.map((variant, variantIndex) => (
                     <VariantRow
-                      key={variant.id}
+                      key={`${variant.variant_sku}-${variantIndex}`}
                       variant={variant}
-                      onEdit={() => setEditingItem(variant)}
+                      onEdit={setEditingItem}
                     />
                   ))}
               </React.Fragment>

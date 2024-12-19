@@ -12,10 +12,25 @@ import {
 } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { FormFields } from "./FormFields";
-import { Product, Variant } from "@/types/inventory";
+import { VariantForm } from "./VariantForm";
+import { useState } from "react";
+
+interface InventoryItem {
+  title: string;
+  type?: string;
+  variant_sku?: string;
+  status?: string;
+  image_src?: string;
+  variant_grams?: number;
+  variant_barcode?: string;
+  option1_name?: string;
+  option1_value?: string;
+  option2_name?: string;
+  option2_value?: string;
+}
 
 interface EditInventoryFormProps {
-  item: Product | Variant;
+  item: InventoryItem;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -25,45 +40,29 @@ export const EditInventoryForm = ({
   open,
   onOpenChange,
 }: EditInventoryFormProps) => {
-  const isVariant = 'sku' in item;
-  
+  const [showVariantForm, setShowVariantForm] = useState(false);
   const form = useForm({
     defaultValues: {
-      title: isVariant ? '' : (item as Product).title || '',
-      type: isVariant ? '' : (item as Product).product_type || '',
-      variant_sku: isVariant ? (item as Variant).sku || '' : '',
-      status: isVariant ? '' : (item as Product).status || '',
-      image_src: 'images' in item && item.images?.[0]?.src || '',
-      variant_grams: isVariant ? (item as Variant).weight || 0 : 0,
-      variant_barcode: isVariant ? (item as Variant).barcode || '' : '',
+      title: item.title,
+      type: item.type || "",
+      variant_sku: item.variant_sku || "",
+      status: item.status || "",
+      image_src: item.image_src || "",
+      variant_grams: item.variant_grams || 0,
+      variant_barcode: item.variant_barcode || "",
     },
   });
 
   const queryClient = useQueryClient();
 
   const { mutate: updateItem, isPending } = useMutation({
-    mutationFn: async (values: any) => {
-      if (isVariant) {
-        const { error } = await supabase
-          .from("variants")
-          .update({
-            sku: values.variant_sku,
-            weight: values.variant_grams,
-            barcode: values.variant_barcode,
-          })
-          .eq("id", item.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from("products")
-          .update({
-            title: values.title,
-            product_type: values.type,
-            status: values.status,
-          })
-          .eq("id", item.id);
-        if (error) throw error;
-      }
+    mutationFn: async (values: Partial<InventoryItem>) => {
+      const { error } = await supabase
+        .from("staging_shopify_inventory")
+        .update(values)
+        .eq("variant_sku", item.variant_sku);
+
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inventory"] });
@@ -76,9 +75,35 @@ export const EditInventoryForm = ({
     },
   });
 
-  const onSubmit = (values: any) => {
+  const { mutate: addVariant } = useMutation({
+    mutationFn: async (variantData: { variant_sku: string; attributes: Record<string, string> }) => {
+      const { error } = await supabase
+        .from("staging_shopify_inventory")
+        .insert({
+          title: `${item.title} - Variant`,
+          variant_sku: variantData.variant_sku,
+          option1_name: Object.keys(variantData.attributes)[0],
+          option1_value: Object.values(variantData.attributes)[0],
+        });
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inventory"] });
+      toast.success("Variant added successfully");
+      setShowVariantForm(false);
+    },
+    onError: (error) => {
+      toast.error("Failed to add variant");
+      console.error("Error adding variant:", error);
+    },
+  });
+
+  const onSubmit = (values: Partial<InventoryItem>) => {
     updateItem(values);
   };
+
+  const canAddVariant = item.title && !item.option1_name;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -86,7 +111,7 @@ export const EditInventoryForm = ({
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">
-              Edit {isVariant ? 'Variant' : 'Product'}
+              Edit Inventory Item
             </DialogTitle>
             <Button
               variant="ghost"
@@ -100,7 +125,23 @@ export const EditInventoryForm = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormFields form={form} isVariant={isVariant} />
+            <FormFields form={form} />
+            {canAddVariant && (
+              <div className="pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowVariantForm(!showVariantForm)}
+                >
+                  {showVariantForm ? "Hide Variant Form" : "Add Variant"}
+                </Button>
+                {showVariantForm && (
+                  <div className="mt-4">
+                    <VariantForm onAddVariant={addVariant} />
+                  </div>
+                )}
+              </div>
+            )}
             <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"

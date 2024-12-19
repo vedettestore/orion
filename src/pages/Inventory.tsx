@@ -6,7 +6,6 @@ import { InventoryTable } from "@/components/inventory/InventoryTable";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useState } from "react";
-import { Product } from "@/types/inventory";
 
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,33 +13,22 @@ const Inventory = () => {
   const { data: inventoryItems, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: async () => {
-      // Fetch products with their variants and images
-      const { data: products, error: productsError } = await supabase
-        .from("products")
-        .select(`
-          *,
-          variants:variants(
-            *,
-            options:variant_options(*),
-            images:product_images(*)
-          ),
-          images:product_images(*)
-        `);
+      const { data: finalData, error: finalError } = await supabase
+        .from("staging_shopify_inventory")
+        .select("*");
 
-      if (productsError) {
+      if (finalError) {
         toast.error("Failed to fetch inventory data");
-        throw productsError;
+        throw finalError;
       }
 
-      return products as Product[];
+      return finalData;
     },
   });
 
   const filteredItems = inventoryItems?.filter(item => 
-    item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.variants?.some(variant => 
-      variant.sku?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    item.variant_sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.title?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
   return (
