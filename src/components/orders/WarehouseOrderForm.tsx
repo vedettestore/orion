@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calendar } from '@/components/ui/calendar';
@@ -36,6 +42,14 @@ export const WarehouseOrderForm = () => {
     }));
   };
 
+  // Handle select changes
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   // Handle product quantity change
   const handleQuantityChange = (productId, quantity) => {
     setSelectedProducts(prev =>
@@ -55,7 +69,7 @@ export const WarehouseOrderForm = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <Tabs defaultValue="orderInfo" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="orderInfo">Order Information</TabsTrigger>
@@ -82,14 +96,18 @@ export const WarehouseOrderForm = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Order Type</label>
                   <Select
-                    name="orderType"
                     value={formData.orderType}
-                    onChange={handleInputChange}
+                    onValueChange={(value) => handleSelectChange('orderType', value)}
                   >
-                    <option value="standard">Standard Order</option>
-                    <option value="rush">Rush Order</option>
-                    <option value="backorder">Backorder</option>
-                    <option value="preorder">Pre-order</option>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select order type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="standard">Standard Order</SelectItem>
+                      <SelectItem value="rush">Rush Order</SelectItem>
+                      <SelectItem value="backorder">Backorder</SelectItem>
+                      <SelectItem value="preorder">Pre-order</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
               </div>
@@ -142,13 +160,17 @@ export const WarehouseOrderForm = () => {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Preferred Warehouse</label>
                 <Select
-                  name="preferredWarehouse"
                   value={formData.preferredWarehouse}
-                  onChange={handleInputChange}
+                  onValueChange={(value) => handleSelectChange('preferredWarehouse', value)}
                 >
-                  <option value="main">Main Warehouse</option>
-                  <option value="north">North Distribution Center</option>
-                  <option value="south">South Distribution Center</option>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select warehouse" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="main">Main Warehouse</SelectItem>
+                    <SelectItem value="north">North Distribution Center</SelectItem>
+                    <SelectItem value="south">South Distribution Center</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
 
@@ -229,13 +251,17 @@ export const WarehouseOrderForm = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Picking Priority</label>
                   <Select
-                    name="pickingPriority"
                     value={formData.pickingPriority}
-                    onChange={handleInputChange}
+                    onValueChange={(value) => handleSelectChange('pickingPriority', value)}
                   >
-                    <option value="fifo">FIFO (First In, First Out)</option>
-                    <option value="fefo">FEFO (First Expired, First Out)</option>
-                    <option value="lifo">LIFO (Last In, First Out)</option>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select picking priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fifo">FIFO (First In, First Out)</SelectItem>
+                      <SelectItem value="fefo">FEFO (First Expired, First Out)</SelectItem>
+                      <SelectItem value="lifo">LIFO (Last In, First Out)</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
 
