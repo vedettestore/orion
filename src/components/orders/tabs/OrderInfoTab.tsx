@@ -93,7 +93,7 @@ export const OrderInfoTab: React.FC<OrderInfoTabProps> = ({
               <Button
                 key={priority}
                 variant="outline"
-                className={`flex items-center gap-2 px-3 py-2 ${
+                className={`flex items-center gap-2 ${
                   formData.shippingPriority === priority ? 'bg-primary text-primary-foreground' : ''
                 }`}
                 onClick={() => setFormData(prev => ({ ...prev, shippingPriority: priority }))}
