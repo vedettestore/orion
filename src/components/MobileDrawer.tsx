@@ -20,6 +20,9 @@ export function MobileDrawer() {
     }
   };
 
+  // Check if current route is a create route
+  const isCreateRoute = location.pathname.includes('/new');
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -44,7 +47,7 @@ export function MobileDrawer() {
           <nav className="flex-1 overflow-y-auto">
             <ul className="p-4 space-y-2">
               <li>
-                <CreateDrawer />
+                <CreateDrawer isActive={isCreateRoute} />
               </li>
               {menuItems.map((item) => (
                 <li key={item.title}>

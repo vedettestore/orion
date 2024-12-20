@@ -49,6 +49,9 @@ export function AppSidebar() {
     }
   };
 
+  // Check if current route is a create route
+  const isCreateRoute = location.pathname.includes('/new');
+
   return (
     <>
       <MobileDrawer />
@@ -63,7 +66,7 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <CreateDrawer />
+                  <CreateDrawer isActive={isCreateRoute} />
                 </SidebarMenuItem>
                 {menuItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
