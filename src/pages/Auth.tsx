@@ -91,12 +91,18 @@ const AuthPage = () => {
                     password_label: 'Password',
                     button_label: 'Sign up',
                     link_text: 'Already have an account? Sign in',
+                    providers: {
+                      google: 'Continue with Google'
+                    }
                   },
                   sign_in: {
                     email_label: 'Email',
                     password_label: 'Password',
                     button_label: 'Sign in',
                     link_text: 'Don\'t have an account? Sign up',
+                    providers: {
+                      google: 'Continue with Google'
+                    }
                   },
                 },
               }}
