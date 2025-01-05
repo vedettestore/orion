@@ -81,7 +81,7 @@ const AuthPage = () => {
                   button: 'py-2',
                 }
               }}
-              providers={[]}
+              providers={["google"]}
               theme="dark"
               localization={{
                 variables: {
