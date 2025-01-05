@@ -83,26 +83,11 @@ const AuthPage = () => {
               }}
               providers={["google"]}
               theme="dark"
-              view="sign_up"
               localization={{
                 variables: {
-                  sign_up: {
-                    email_label: 'Email',
-                    password_label: 'Password',
-                    button_label: 'Sign up',
-                    link_text: 'Already have an account? Sign in',
-                    providers: {
-                      google: 'Continue with Google'
-                    }
-                  },
                   sign_in: {
                     email_label: 'Email',
                     password_label: 'Password',
-                    button_label: 'Sign in',
-                    link_text: 'Don\'t have an account? Sign up',
-                    providers: {
-                      google: 'Continue with Google'
-                    }
                   },
                 },
               }}
