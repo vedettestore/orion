@@ -50,7 +50,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
     queryFn: async () => {
       const { data, error } = await supabase
         .from('variants')
-        .select('id, sku, price, products(title)')
+        .select('id, sku, price, products!inner(title)')
         .ilike('sku', `%${skuSearch}%`)
         .limit(5);
 
