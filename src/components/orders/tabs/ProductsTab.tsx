@@ -25,6 +25,15 @@ interface ProductsTabProps {
   warehouseAvailability: Record<string, any>;
 }
 
+interface VariantWithProduct {
+  id: string;
+  sku: string;
+  price: number;
+  products: {
+    title: string;
+  };
+}
+
 export const ProductsTab: React.FC<ProductsTabProps> = ({
   selectedProducts,
   handleQuantityChange,
@@ -35,8 +44,8 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
   const [skuSearch, setSkuSearch] = useState('');
   const [quantity, setQuantity] = useState(1);
 
-  // Fetch products based on SKU search
-  const { data: products } = useQuery({
+  // Fetch products based on SKU search with proper typing
+  const { data: products } = useQuery<VariantWithProduct[]>({
     queryKey: ['products', skuSearch],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -46,7 +55,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
         .limit(5);
 
       if (error) throw error;
-      return data;
+      return data as VariantWithProduct[];
     },
     enabled: skuSearch.length > 2,
   });
@@ -107,6 +116,8 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
                           sku: product.sku,
                           price: product.price,
                           quantity: quantity,
+                          stock: 0,
+                          location: '',
                         };
                         // Call parent component to add product
                       }}
