@@ -55,7 +55,7 @@ export function AppSidebar() {
         <SidebarContent>
           <div className="px-4 py-5 mb-6">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              W
+              Orion
             </h1>
           </div>
           <SidebarGroup>
