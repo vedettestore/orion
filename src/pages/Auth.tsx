@@ -1,9 +1,9 @@
+
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Mail, Lock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const AuthPage = () => {
@@ -59,8 +59,8 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
       <div className="w-full max-w-sm">
-        <div className="bg-[#000000e6] p-4 md:p-6 rounded-lg shadow-sm">
-          <h1 className="text-xl font-semibold text-center mb-6 text-white">Orion Manufacturing</h1>
+        <div className="bg-[#dde1e7] p-8 rounded-lg shadow-[2px_2px_5px_#BABECC,-5px_-5px_10px_#ffffff73]">
+          <h1 className="text-3xl font-semibold text-center mb-8 text-[#595959]">Orion</h1>
           <div className="relative">
             <Auth
               supabaseClient={supabase}
@@ -69,20 +69,25 @@ const AuthPage = () => {
                 variables: {
                   default: {
                     colors: {
-                      brand: '#bf7a8c',
-                      brandAccent: '#a66475',
-                      inputBackground: '#333333',
+                      brand: '#3498db',
+                      brandAccent: '#2980b9',
+                      inputBackground: '#dde1e7',
+                      inputBorder: 'transparent',
+                      inputText: '#595959',
+                      inputPlaceholder: '#666666',
                     },
                   },
                 },
                 className: {
-                  input: 'pl-10',
-                  container: 'gap-3',
-                  button: 'py-2',
+                  container: 'gap-4',
+                  button: 'bg-[#dde1e7] text-[#595959] h-[50px] rounded-[25px] font-semibold shadow-[2px_2px_5px_#BABECC,-5px_-5px_10px_#ffffff73] hover:shadow-[inset_2px_2px_5px_#BABECC,inset_-5px_-5px_10px_#ffffff73] hover:text-[#3498db]',
+                  input: 'h-[50px] w-full pl-[45px] text-lg bg-[#dde1e7] text-[#595959] rounded-[25px] shadow-[inset_2px_2px_5px_#BABECC,inset_-5px_-5px_10px_#ffffff73] focus:shadow-[inset_1px_1px_2px_#BABECC,inset_-1px_-1px_2px_#ffffff73] border-none',
+                  label: 'text-[#666666]',
+                  loader: 'text-[#3498db]',
+                  anchor: 'text-[#3498db] hover:underline',
                 }
               }}
               providers={["google"]}
-              theme="dark"
               localization={{
                 variables: {
                   sign_in: {
@@ -92,8 +97,16 @@ const AuthPage = () => {
                 },
               }}
             />
-            <Mail className="absolute text-gray-400 left-3 top-[59px] h-5 w-5 pointer-events-none" />
-            <Lock className="absolute text-gray-400 left-3 top-[127px] h-5 w-5 pointer-events-none" />
+            <div className="absolute left-3 top-[59px] text-[#595959] w-[50px] leading-[55px]">
+              <svg className="w-5 h-5" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M256 0c-74.439 0-135 60.561-135 135s60.561 135 135 135 135-60.561 135-135S330.439 0 256 0zM423.966 358.195C387.006 320.667 338.009 300 286 300h-60c-52.008 0-101.006 20.667-137.966 58.195C51.255 395.539 31 444.833 31 497c0 8.284 6.716 15 15 15h420c8.284 0 15-6.716 15-15 0-52.167-20.255-101.461-57.034-138.805z" fill="#595959"/>
+              </svg>
+            </div>
+            <div className="absolute left-3 top-[127px] text-[#595959] w-[50px] leading-[55px]">
+              <svg className="w-5 h-5" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M336 192h-16v-64C320 57.406 262.594 0 192 0S64 57.406 64 128v64H48c-26.453 0-48 21.523-48 48v224c0 26.477 21.547 48 48 48h288c26.453 0 48-21.523 48-48V240c0-26.477-21.547-48-48-48zm-229.332-64c0-47.063 38.27-85.332 85.332-85.332s85.332 38.27 85.332 85.332v64H106.668z" fill="#595959"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>

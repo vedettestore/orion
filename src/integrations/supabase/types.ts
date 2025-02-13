@@ -169,6 +169,177 @@ export type Database = {
           },
         ]
       }
+      main_products: {
+        Row: {
+          age_group: string | null
+          beae_product_countdown_end_at: string | null
+          beae_product_countdown_start_at: string | null
+          care_instructions: string | null
+          color: string | null
+          color_filter_swatch: string | null
+          color_pattern: string | null
+          compare_at_price_international: number | null
+          compare_at_price_us: number | null
+          complementary_products: string | null
+          cost_per_item: number | null
+          ecomposer_product_countdown_end_at: string | null
+          ecomposer_product_countdown_start_at: string | null
+          fabric: string | null
+          fit: string | null
+          google_shopping_age_group: string | null
+          google_shopping_category: string | null
+          google_shopping_condition: string | null
+          google_shopping_custom_label_0: string | null
+          google_shopping_custom_label_1: string | null
+          google_shopping_custom_label_2: string | null
+          google_shopping_custom_label_3: string | null
+          google_shopping_custom_label_4: string | null
+          google_shopping_custom_product: string | null
+          google_shopping_gender: string | null
+          google_shopping_mpn: string | null
+          id: number
+          included_international: boolean | null
+          included_us: boolean | null
+          intimate_apparel_features: string | null
+          maternity_clothing_features: string | null
+          price_international: number | null
+          price_us: number | null
+          product_category: string | null
+          product_code: string | null
+          product_rating_count: number | null
+          published: boolean
+          related_products: string | null
+          related_products_settings: string | null
+          search_product_boosts: string | null
+          seo_description: string | null
+          seo_title: string | null
+          shapewear_support_level: string | null
+          size: string | null
+          status: string
+          swimwear_features: string | null
+          tags: string | null
+          target_gender: string | null
+          tax_code: string | null
+          title: string
+          type: string | null
+          variant_image: string | null
+          vendor: string
+          weight_unit: string | null
+        }
+        Insert: {
+          age_group?: string | null
+          beae_product_countdown_end_at?: string | null
+          beae_product_countdown_start_at?: string | null
+          care_instructions?: string | null
+          color?: string | null
+          color_filter_swatch?: string | null
+          color_pattern?: string | null
+          compare_at_price_international?: number | null
+          compare_at_price_us?: number | null
+          complementary_products?: string | null
+          cost_per_item?: number | null
+          ecomposer_product_countdown_end_at?: string | null
+          ecomposer_product_countdown_start_at?: string | null
+          fabric?: string | null
+          fit?: string | null
+          google_shopping_age_group?: string | null
+          google_shopping_category?: string | null
+          google_shopping_condition?: string | null
+          google_shopping_custom_label_0?: string | null
+          google_shopping_custom_label_1?: string | null
+          google_shopping_custom_label_2?: string | null
+          google_shopping_custom_label_3?: string | null
+          google_shopping_custom_label_4?: string | null
+          google_shopping_custom_product?: string | null
+          google_shopping_gender?: string | null
+          google_shopping_mpn?: string | null
+          id?: never
+          included_international?: boolean | null
+          included_us?: boolean | null
+          intimate_apparel_features?: string | null
+          maternity_clothing_features?: string | null
+          price_international?: number | null
+          price_us?: number | null
+          product_category?: string | null
+          product_code?: string | null
+          product_rating_count?: number | null
+          published: boolean
+          related_products?: string | null
+          related_products_settings?: string | null
+          search_product_boosts?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          shapewear_support_level?: string | null
+          size?: string | null
+          status: string
+          swimwear_features?: string | null
+          tags?: string | null
+          target_gender?: string | null
+          tax_code?: string | null
+          title: string
+          type?: string | null
+          variant_image?: string | null
+          vendor: string
+          weight_unit?: string | null
+        }
+        Update: {
+          age_group?: string | null
+          beae_product_countdown_end_at?: string | null
+          beae_product_countdown_start_at?: string | null
+          care_instructions?: string | null
+          color?: string | null
+          color_filter_swatch?: string | null
+          color_pattern?: string | null
+          compare_at_price_international?: number | null
+          compare_at_price_us?: number | null
+          complementary_products?: string | null
+          cost_per_item?: number | null
+          ecomposer_product_countdown_end_at?: string | null
+          ecomposer_product_countdown_start_at?: string | null
+          fabric?: string | null
+          fit?: string | null
+          google_shopping_age_group?: string | null
+          google_shopping_category?: string | null
+          google_shopping_condition?: string | null
+          google_shopping_custom_label_0?: string | null
+          google_shopping_custom_label_1?: string | null
+          google_shopping_custom_label_2?: string | null
+          google_shopping_custom_label_3?: string | null
+          google_shopping_custom_label_4?: string | null
+          google_shopping_custom_product?: string | null
+          google_shopping_gender?: string | null
+          google_shopping_mpn?: string | null
+          id?: never
+          included_international?: boolean | null
+          included_us?: boolean | null
+          intimate_apparel_features?: string | null
+          maternity_clothing_features?: string | null
+          price_international?: number | null
+          price_us?: number | null
+          product_category?: string | null
+          product_code?: string | null
+          product_rating_count?: number | null
+          published?: boolean
+          related_products?: string | null
+          related_products_settings?: string | null
+          search_product_boosts?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          shapewear_support_level?: string | null
+          size?: string | null
+          status?: string
+          swimwear_features?: string | null
+          tags?: string | null
+          target_gender?: string | null
+          tax_code?: string | null
+          title?: string
+          type?: string | null
+          variant_image?: string | null
+          vendor?: string
+          weight_unit?: string | null
+        }
+        Relationships: []
+      }
       packing_list_items: {
         Row: {
           id: number
