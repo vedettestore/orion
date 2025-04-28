@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { EditInventoryForm } from "./EditInventoryForm";
@@ -6,6 +7,7 @@ import { MainProductRow } from "./MainProductRow";
 import { VariantRow } from "./VariantRow";
 import { LoadingState } from "./LoadingState";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface InventoryItem {
   title: string;
@@ -23,9 +25,16 @@ interface InventoryItem {
 interface InventoryTableProps {
   data: InventoryItem[];
   isLoading: boolean;
+  selectedItems: string[];
+  setSelectedItems: (items: string[]) => void;
 }
 
-export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
+export const InventoryTable = ({ 
+  data, 
+  isLoading,
+  selectedItems,
+  setSelectedItems,
+}: InventoryTableProps) => {
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [expandedItems, setExpandedItems] = useState<number[]>([]);
   const isMobile = useIsMobile();
@@ -36,6 +45,15 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
     );
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const allSkus = data.map(item => item.variant_sku!).filter(Boolean);
+      setSelectedItems(allSkus);
+    } else {
+      setSelectedItems([]);
+    }
   };
 
   const mainProducts = data.filter(item => 
@@ -67,7 +85,11 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
         <div className={`overflow-x-auto ${isMobile ? 'max-w-[100vw]' : ''}`}>
           <Table>
-            <InventoryTableHeader />
+            <InventoryTableHeader 
+              onSelectAll={handleSelectAll}
+              allSelected={selectedItems.length === data.length}
+              someSelected={selectedItems.length > 0 && selectedItems.length < data.length}
+            />
             <TableBody>
               {mainProducts.map((item, index) => (
                 <React.Fragment key={item.variant_sku || index}>
@@ -77,6 +99,14 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
                     isExpanded={expandedItems.includes(parseInt(item.variant_sku || '0'))}
                     onToggleExpand={() => toggleExpand(parseInt(item.variant_sku || '0'))}
                     onEdit={setEditingItem}
+                    isSelected={selectedItems.includes(item.variant_sku!)}
+                    onSelect={(checked) => {
+                      if (checked) {
+                        setSelectedItems([...selectedItems, item.variant_sku!]);
+                      } else {
+                        setSelectedItems(selectedItems.filter(sku => sku !== item.variant_sku));
+                      }
+                    }}
                   />
                   {expandedItems.includes(parseInt(item.variant_sku || '0')) &&
                     variantsByParent[item.variant_sku || '']?.map((variant, variantIndex) => (
@@ -84,6 +114,14 @@ export const InventoryTable = ({ data, isLoading }: InventoryTableProps) => {
                         key={`${variant.variant_sku}-${variantIndex}`}
                         variant={variant}
                         onEdit={setEditingItem}
+                        isSelected={selectedItems.includes(variant.variant_sku!)}
+                        onSelect={(checked) => {
+                          if (checked) {
+                            setSelectedItems([...selectedItems, variant.variant_sku!]);
+                          } else {
+                            setSelectedItems(selectedItems.filter(sku => sku !== variant.variant_sku));
+                          }
+                        }}
                       />
                     ))}
                 </React.Fragment>
