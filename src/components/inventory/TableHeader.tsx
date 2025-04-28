@@ -27,7 +27,8 @@ export const InventoryTableHeader = ({
   // Set indeterminate prop via DOM API since it's not in the React props
   React.useEffect(() => {
     if (checkboxRef.current) {
-      checkboxRef.current.indeterminate = someSelected && !allSelected;
+      // Cast to HTMLInputElement to access indeterminate property
+      (checkboxRef.current.querySelector('input[type="checkbox"]') as HTMLInputElement).indeterminate = someSelected && !allSelected;
     }
   }, [someSelected, allSelected]);
 
