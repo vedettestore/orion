@@ -1,6 +1,8 @@
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "./StatusBadge";
 import { ActionButtons } from "./ActionButtons";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface InventoryItem {
   title: string;
@@ -19,6 +21,8 @@ interface InventoryItem {
 interface VariantRowProps {
   variant: InventoryItem;
   onEdit: (variant: InventoryItem) => void;
+  isSelected: boolean;
+  onSelect: (checked: boolean) => void;
 }
 
 const renderVariantAttributes = (variant: InventoryItem) => {
@@ -35,10 +39,15 @@ const renderVariantAttributes = (variant: InventoryItem) => {
   );
 };
 
-export const VariantRow = ({ variant, onEdit }: VariantRowProps) => {
+export const VariantRow = ({ variant, onEdit, isSelected, onSelect }: VariantRowProps) => {
   return (
     <TableRow className="hover:bg-gray-50/50 bg-gray-50/30">
-      <TableCell></TableCell>
+      <TableCell className="pl-4">
+        <Checkbox 
+          checked={isSelected}
+          onCheckedChange={onSelect}
+        />
+      </TableCell>
       <TableCell className="pl-8">
         <div className="flex flex-col">
           <span className="font-medium text-gray-900">{variant.title}</span>

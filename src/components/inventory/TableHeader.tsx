@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/table";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Checkbox } from "@/components/ui/checkbox";
+import * as React from "react";
 
 interface InventoryTableHeaderProps {
   onSelectAll: (checked: boolean) => void;
@@ -19,14 +20,24 @@ export const InventoryTableHeader = ({
   someSelected
 }: InventoryTableHeaderProps) => {
   const isMobile = useIsMobile();
+  
+  // Use useRef to create a DOM reference for the checkbox
+  const checkboxRef = React.useRef<HTMLButtonElement>(null);
+  
+  // Set indeterminate prop via DOM API since it's not in the React props
+  React.useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = someSelected && !allSelected;
+    }
+  }, [someSelected, allSelected]);
 
   return (
     <UITableHeader>
       <TableRow className="bg-gray-50 hover:bg-gray-50">
         <TableHead className="w-[50px] pl-4">
           <Checkbox 
+            ref={checkboxRef}
             checked={allSelected}
-            indeterminate={someSelected && !allSelected}
             onCheckedChange={onSelectAll}
           />
         </TableHead>

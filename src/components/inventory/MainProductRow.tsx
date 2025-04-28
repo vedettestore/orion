@@ -1,9 +1,11 @@
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { ProductCell } from "./ProductCell";
 import { StatusBadge } from "./StatusBadge";
 import { ActionButtons } from "./ActionButtons";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface InventoryItem {
   title: string;
@@ -25,6 +27,8 @@ interface MainProductRowProps {
   isExpanded: boolean;
   onToggleExpand: () => void;
   onEdit: (item: InventoryItem) => void;
+  isSelected: boolean;
+  onSelect: (checked: boolean) => void;
 }
 
 export const MainProductRow = ({
@@ -33,9 +37,17 @@ export const MainProductRow = ({
   isExpanded,
   onToggleExpand,
   onEdit,
+  isSelected,
+  onSelect,
 }: MainProductRowProps) => {
   return (
     <TableRow className="hover:bg-gray-50/50">
+      <TableCell className="pl-4">
+        <Checkbox 
+          checked={isSelected}
+          onCheckedChange={onSelect}
+        />
+      </TableCell>
       <TableCell>
         {hasVariants && (
           <Button
